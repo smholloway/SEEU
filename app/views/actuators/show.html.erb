@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @actuator.name %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%= @actuator.description %>
+</p>
+
+<p>
+  <b>Manufacturer:</b>
+  <%= @actuator.manufacturer %>
+</p>
+
+<p>
+  <b>Model:</b>
+  <%= @actuator.model %>
+</p>
+
+<p>
+  <b>Data uri:</b>
+  <%= @actuator.data_uri %>
+</p>
+
+<p>
+  <b>Configuration uri:</b>
+  <%= @actuator.configuration_uri %>
+</p>
+
+
+<%= link_to 'Edit', edit_actuator_path(@actuator) %> |
+<%= link_to 'Back', actuators_path %>

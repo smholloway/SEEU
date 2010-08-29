@@ -1,0 +1,15 @@
+rails new seeu
+cd seeu/
+rails generate scaffold Sensor name:string description:text manufacturer:string model:string data_uri:string configuration_uri:string
+rails generate scaffold Actuator name:string description:text manufacturer:string model:string data_uri:string configuration_uri:string
+rake db:migrate
+
+Add project to version control
+
+Navigate to http://localhost:3000/sensors
+Create a sensor
+
+Navigate to http://localhost:3000/actuators
+Create an actuator
+
+
