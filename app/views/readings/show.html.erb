@@ -5,6 +5,6 @@
   <%= @reading.data %>
 </p>
 
+<%= link_to 'Back', sensor_readings_path(@sensor) %> |
+<%= link_to 'Edit', edit_sensor_reading_path(@sensor, @reading) %>
 
-<%= link_to 'Edit', edit_reading_path(@reading) %> |
-<%= link_to 'Back', readings_path %>
