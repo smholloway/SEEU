@@ -5,6 +5,8 @@ rails generate scaffold Actuator name:string description:text manufacturer:strin
 rails generate scaffold Reading data:string
 rails generate scaffold Command data:string
 rake db:migrate
+rails generate controller home
+	Edit the routes (config/routes) making root route to home
 
 Add project to version control
 	git init
@@ -28,11 +30,20 @@ rails generate scaffold Command data:string actuator_id:integer
 
 Fix the routes
 	Edit routes so that commands are under actuators and readings are under sensors
-	
-Put images and CSS into ./public/images/ and ./public/stylesheets/
-
-rails generate controller home
-
-Edit the routes (config/routes) making root route to home
 
 Put images and CSS into ./public/images/ and ./public/stylesheets/
+
+Fix commands
+	No good examples, but it is similar to standard blog example with form_for changes described here:
+		http://geekninja.blogspot.com/2008/08/mapresources-hasone-formfor-surprise.html
+	In controller, 
+		Create @actuator = Actuator.find(params[:actuator_id]) for each method
+
+
+Fix readings
+	Similar to standard blog example
+	In controller,
+		Create @sensor = Sensor.find(params[:sensor_id]) for each method
+
+
+
