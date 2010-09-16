@@ -19,8 +19,8 @@
     <td><%= actuator.description %></td>
     <td><%= actuator.manufacturer %></td>
     <td><%= actuator.model %></td>
-    <td><%= actuator.data_uri %></td>
-    <td><%= actuator.configuration_uri %></td>
+    <td><%= link_to actuator.data_uri, actuator.data_uri %></td>
+    <td><%= link_to actuator.configuration_uri, actuator.configuration_uri %></td>
     <td><%= link_to 'Show', actuator %></td>
     <td><%= link_to 'Edit', edit_actuator_path(actuator) %></td>
     <td><%= link_to 'Destroy', actuator, :confirm => 'Are you sure?', :method => :delete %></td>
@@ -30,4 +30,5 @@
 
 <br />
 
+<%= link_to 'Home', root_path %> | 
 <%= link_to 'New Actuator', new_actuator_path %>

@@ -1,0 +1,14 @@
+<% if @command.nil? %>
+OFF
+  <% else %>
+  <% if @command.data.nil?  %>
+0
+  <% end %>
+<%=h @command.data rescue nil %>
+<% end %>
+
+<br/>
+
+<%= link_to 'Back to actuator', actuator_path(@actuator) %> |
+<%= link_to 'Edit command', edit_actuator_commands_path(@actuator) %>
+

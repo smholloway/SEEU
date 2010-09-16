@@ -2,9 +2,14 @@ rails new seeu
 cd seeu/
 rails generate scaffold Sensor name:string description:text manufacturer:string model:string data_uri:string configuration_uri:string
 rails generate scaffold Actuator name:string description:text manufacturer:string model:string data_uri:string configuration_uri:string
+rails generate scaffold Reading data:string
+rails generate scaffold Command data:string
 rake db:migrate
 
 Add project to version control
+	git init
+	git add .
+	git commit -a -m "Basic SEEU application with sensors and actuators."
 
 Navigate to http://localhost:3000/sensors
 Create a sensor
@@ -12,4 +17,22 @@ Create a sensor
 Navigate to http://localhost:3000/actuators
 Create an actuator
 
+rails generate scaffold Reading data:string sensor_id:integer
+	Edit the Reading model to include belongs_to :sensor
+	Edit the Sensor model to include has_many :readings
+	Edit the Sensor model to include before_destroy :ensure_not_referenced_by_any_reading
 
+rails generate scaffold Command data:string actuator_id:integer
+	Edit the Command model to include belongs_to :actuator
+	Edit the Actuator model to include has_one :command
+
+Fix the routes
+	Edit routes so that commands are under actuators and readings are under sensors
+	
+Put images and CSS into ./public/images/ and ./public/stylesheets/
+
+rails generate controller home
+
+Edit the routes (config/routes) making root route to home
+
+Put images and CSS into ./public/images/ and ./public/stylesheets/

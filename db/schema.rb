@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100828021132) do
+ActiveRecord::Schema.define(:version => 20100830012949) do
 
   create_table "actuators", :force => true do |t|
     t.string   "name"
@@ -21,6 +21,20 @@ ActiveRecord::Schema.define(:version => 20100828021132) do
     t.string   "configuration_uri"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "commands", :force => true do |t|
+    t.string   "data"
+    t.integer  "actuator_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "readings", :force => true do |t|
+    t.string   "data"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "sensor_id"
   end
 
   create_table "sensors", :force => true do |t|

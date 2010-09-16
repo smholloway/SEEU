@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <title>SEEU: Sensor Enablement for End Users</title>
+	<%= stylesheet_link_tag 'seeu' %>
+    <script type="text/javascript" src="javascripts/prototype.js"></script>
+    <script type="text/javascript" src="javascripts/effects.js"></script>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+    <script type="text/javascript">
+      function about() {
+        if (Element.empty('about-content')) {
+          new Ajax.Updater('about-content', 'rails/info/properties', {
+            method:     'get',
+            onFailure:  function() {Element.classNames('about-content').add('failure')},
+            onComplete: function() {new Effect.BlindDown('about-content', {duration: 0.25})}
+          });
+        } else {
+          new Effect[Element.visible('about-content') ? 
+            'BlindUp' : 'BlindDown']('about-content', {duration: 0.25});
+        }
+      }
+      
+      window.onload = function() {
+        $('search-text').value = '';
+        $('search').onsubmit = function() {
+          $('search-text').value = 'site:rubyonrails.org ' + $F('search-text');
+        }
+      }
+    </script>
+    <script type="text/javascript">
+	  $(document).ready(function(){
+	    if (true) {
+	      $('#topannounce').fadeIn('slow');
+	    }
+	  });
+    </script>
+  </head>
+  <body>
+    <div id="page">
+      <div id="content">
+        <div id="header">
+		  <%= image_tag "/images/SEEU.png", :size => "800x117", :mouseover => "/images/SEEU-hover.png" %>
+		</div>
+		<div id="left-box">
+		
+			<span class="box-heading"><%= link_to 'Sensors', sensors_path %></span>
+		
+			<% for sensor in @sensors %>
+			<hr>
+			<div class="entry">
+				Name: <%= link_to sensor.name, sensor_path(sensor) %><br/>
+				<img src="images/<%=h sensor.model %>.jpg"/><br/>
+				Description: <%=h sensor.description %><br/>
+				Recent Readings:<br/>
+				<ul>
+					<% sensor.readings.reverse.each_with_index do |reading, count| %>
+						<li>Reading: <%=h reading.data %></li>
+					<% break if count >= 2 %>
+					<% end %>
+				</ul>
+				Config URI: <a href="<%=h sensor.configuration_uri %>"><%=h sensor.configuration_uri %></a><br/>
+			</div>
+			<% end %>
+		</div>
+		
+		<div id="right-box">
+			<span class="box-heading"><%= link_to 'Actuators', actuators_path %></span>
+			
+			<% for actuator in @actuators %>
+			<hr>
+			<div class="entry">
+				Name: <%= link_to actuator.name, actuator_path(actuator) %><br/>
+				<img src="images/<%=h actuator.model %>.jpg"/><br/>
+				Description: <%=h actuator.description %><br/>
+        <% if !actuator.command.data.nil? %>
+		  		Command: <%=h actuator.command.data %> <br/>
+	  		<% end %>
+				Config URI: <a href="<%=h actuator.configuration_uri %>"><%=h actuator.configuration_uri %></a><br/>
+			</div>
+			<% end %>
+		</div>
+		
+      </div>
+      
+      <div id="footer">&copy; <a href="http://www.sethholloway.com/">Seth Holloway</a> - <a href="http://mpc.ece.utexas.edu/">MPC</a> - <a href="http://www.utexas.edu/">The University of Texas at Austin</a></div>
+    </div>
+  </body>
+</html>

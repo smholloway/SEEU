@@ -21,15 +21,20 @@
 </p>
 
 <p>
+  <b>Command:</b>
+  <%= @actuator.command.data rescue nil %>
+</p>
+
+<p>
   <b>Data uri:</b>
-  <%= @actuator.data_uri %>
+  <%= link_to @actuator.data_uri, @actuator.data_uri %>
 </p>
 
 <p>
   <b>Configuration uri:</b>
-  <%= @actuator.configuration_uri %>
+  <%= link_to @actuator.configuration_uri, @actuator.configuration_uri %>
 </p>
 
 
-<%= link_to 'Edit', edit_actuator_path(@actuator) %> |
-<%= link_to 'Back', actuators_path %>
+<%= link_to 'Back', actuators_path %> | 
+<%= link_to 'Edit', edit_actuator_path(@actuator) %>

@@ -22,14 +22,18 @@
 
 <p>
   <b>Data uri:</b>
-  <%= @sensor.data_uri %>
+  <%= link_to @sensor.data_uri, @sensor.data_uri %>
 </p>
 
 <p>
   <b>Configuration uri:</b>
-  <%= @sensor.configuration_uri %>
+  <%= link_to @sensor.configuration_uri, @sensor.configuration_uri %>
 </p>
 
+<% @sensor.readings.reverse.each_with_index do |reading, count| %>
+  <p>Reading: <%=h reading.data %></p>
+  <% break if count >= 2 %>
+<% end %>
 
-<%= link_to 'Edit', edit_sensor_path(@sensor) %> |
-<%= link_to 'Back', sensors_path %>
+<%= link_to 'Back', sensors_path %> | 
+<%= link_to 'Edit', edit_sensor_path(@sensor) %>
