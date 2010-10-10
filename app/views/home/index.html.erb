@@ -4,10 +4,10 @@
   <head>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
     <title>SEEU: Sensor Enablement for End Users</title>
-	<%= stylesheet_link_tag 'seeu' %>
+  	<%= stylesheet_link_tag 'seeu' %>
     <script type="text/javascript" src="javascripts/prototype.js"></script>
     <script type="text/javascript" src="javascripts/effects.js"></script>
-	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+  	<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
     <script type="text/javascript">
       function about() {
         if (Element.empty('about-content')) {
@@ -37,54 +37,150 @@
 	  });
     </script>
   </head>
+
   <body>
     <div id="page">
       <div id="content">
         <div id="header">
-		  <%= image_tag "/images/SEEU.png", :size => "800x117", :mouseover => "/images/SEEU-hover.png" %>
-		</div>
-		<div id="left-box">
+    		  <%= image_tag "/images/SEEU.png", :size => "800x117", :mouseover => "/images/SEEU-hover.png" %>
+	    	</div> <!-- header -->
+
+    		<div id="left-box">
+		    	<span class="box-heading"><%= link_to 'Sensors', sensors_path %></span>
 		
-			<span class="box-heading"><%= link_to 'Sensors', sensors_path %></span>
+    			<% for sensor in @sensors %>
+		    	<hr>
+    			<div class="entry">
+		    		Name: <%= link_to sensor.name, sensor_path(sensor) %><br/>
+    				<img src="images/<%=h sensor.model %>.jpg"/><br/>
+		    		Description: <%=h sensor.description %><br/>
+			    	Recent Readings:<br/>
+    				<ul>
+		    			<% sensor.readings.reverse.each_with_index do |reading, count| %>
+				  		<li>Reading: <%=h reading.data %></li>
+			    		<% break if count >= 2 %>
+    					<% end %>
+		    		</ul>
+	    			Config URI: <a href="<%=h sensor.configuration_uri %>"><%=h sensor.configuration_uri %></a><br/>
+    			</div> <!-- entry -->
+		    	<% end %>
+	    	</div> <!-- left-box -->
 		
-			<% for sensor in @sensors %>
-			<hr>
-			<div class="entry">
-				Name: <%= link_to sensor.name, sensor_path(sensor) %><br/>
-				<img src="images/<%=h sensor.model %>.jpg"/><br/>
-				Description: <%=h sensor.description %><br/>
-				Recent Readings:<br/>
-				<ul>
-					<% sensor.readings.reverse.each_with_index do |reading, count| %>
-						<li>Reading: <%=h reading.data %></li>
-					<% break if count >= 2 %>
-					<% end %>
-				</ul>
-				Config URI: <a href="<%=h sensor.configuration_uri %>"><%=h sensor.configuration_uri %></a><br/>
-			</div>
-			<% end %>
-		</div>
-		
-		<div id="right-box">
-			<span class="box-heading"><%= link_to 'Actuators', actuators_path %></span>
+    		<div id="right-box">
+		    	<span class="box-heading"><%= link_to 'Actuators', actuators_path %></span>
 			
-			<% for actuator in @actuators %>
-			<hr>
-			<div class="entry">
-				Name: <%= link_to actuator.name, actuator_path(actuator) %><br/>
-				<img src="images/<%=h actuator.model %>.jpg"/><br/>
-				Description: <%=h actuator.description %><br/>
-        <% if !actuator.command.data.nil? %>
-		  		Command: <%=h actuator.command.data %> <br/>
-	  		<% end %>
-				Config URI: <a href="<%=h actuator.configuration_uri %>"><%=h actuator.configuration_uri %></a><br/>
-			</div>
-			<% end %>
-		</div>
+    			<% for actuator in @actuators %>
+    			<hr>
+    			<div class="entry">
+    				Name: <%= link_to actuator.name, actuator_path(actuator) %><br/>
+			    	<img src="images/<%=h actuator.model %>.jpg"/><br/>
+		    		Description: <%=h actuator.description %><br/>
+            <% if !actuator.command.data.nil? %>
+  		  		Command: <%=h actuator.command.data %> <br/>
+	      		<% end %>
+			    	Config URI: <a href="<%=h actuator.configuration_uri %>"><%=h actuator.configuration_uri %></a><br/>
+	    		</div> <!-- entry -->
+    			<% end %>
+	    	</div> <!-- right box -->
 		
-      </div>
+        <div style="clear:both"></div>
+        <hr/>
+
+        <div id="rules">
+          <h3>Rules</h3>
+        
+          <%= form_tag do %>
+            <% operators_array = [">", ">=", "=", "=<", "<"] %>
+            <% values_array = Array.new(16) { |i| 65+i } %>
+            <% conditionals_array = ["and", "or"] %>
+
+            if <%= collection_select(:sensor, :sensor_id, Sensor.all, :name, :name ) %> 
+              <%= select(:operator, :operator, operators_array) %>
+              <%= select(:value, :value, values_array) %>
+              <%= select(:conditional, :conditional, conditionals_array) %>
+            <br/>
+            then set <%= collection_select(:actuator, :actuator_id, Actuator.all, :name, :name) %> to 
+              <%= select(:value, :value, values_array) %>
+            <br/>
+            <%= submit_tag("Create Rule") %>
+          <% end %>
+          <br/>
+
+          <hr/>
+          <div id="click-rules">
+            <div id="rules-conditionals" style="display: block">
+              <span class="clickable">if</span>
+              <span class="clickable">then</span>
+              <span class="clickable">and</span>
+              <span class="clickable">or</span>
+            </div>
+            <div class="clear" style="display:block"><br/></div>
+            <div id="rules-operators">
+             <span class="clickable">greater than</span>
+             <span class="clickable">equal to</span>
+             <span class="clickable">less than</span>
+            </div>
+            <div class="clear" style="display:block"><br/></div>
+            <div id="rules-sensors">
+             <span class="clickable">sensor1</span>
+            </div>
+            <div class="clear" style="display:block"><br/></div>
+            <div id="rules-actuators">
+              <span class="clickable">Actuator1</span>
+              <span class="clickable">Actuator2</span>
+              <span class="clickable">Actuator3</span>
+              <span class="clickable">Actuator4</span>
+              <span class="clickable">Actuator5</span>
+              <span class="clickable">Actuator6</span>
+            </div>
+            <div class="clear" style="display:block"><br/></div>
+            <div id="rules-values">
+              <% (0..20).each do |i| %>
+              <span class="clickable"><%= i %></span>
+              <% end %>
+            <div class="clear" style="display:block"><br/></div>
+              <% (21..40).each do |i| %>
+              <span class="clickable"><%= i %></span>
+              <% end %>
+            <div class="clear" style="display:block"><br/></div>
+              <% (41..60).each do |i| %>
+              <span class="clickable"><%= i %></span>
+              <% end %>
+            <div class="clear" style="display:block"><br/></div>
+              <% (61..80).each do |i| %>
+              <span class="clickable"><%= i %></span>
+              <% end %>
+            <div class="clear" style="display:block"><br/></div>
+              <% (81..100).each do |i| %>
+              <span class="clickable"><%= i %></span>
+              <% end %>
+            </div>
+            <div class="clear" style="display:block"><br/></div>
+          </div>
+
+          <div id="click-rules-written">
+          </div>
+
+          <script>
+            $("span.clickable").click(function () { 
+              var button_text = $(this).html()+' ';
+              $("div#click-rules-written").append(button_text);
+            });
+            $("span.clickable").hover(function () {
+              $(this).addClass("hilite");
+            }, function () {
+              $(this).removeClass("hilite");
+            });
+          </script>
+          <hr/>
+
+       </div> <!-- rules -->
+
+      </div> <!-- content -->
       
-      <div id="footer">&copy; <a href="http://www.sethholloway.com/">Seth Holloway</a> - <a href="http://mpc.ece.utexas.edu/">MPC</a> - <a href="http://www.utexas.edu/">The University of Texas at Austin</a></div>
-    </div>
+      <div id="footer">
+        &copy; <a href="http://www.sethholloway.com/">Seth Holloway</a> - <a href="http://mpc.ece.utexas.edu/">MPC</a> - <a href="http://www.utexas.edu/">The University of Texas at Austin</a>
+      </div> <!-- footer -->
+    </div> <!-- page -->
   </body>
 </html>

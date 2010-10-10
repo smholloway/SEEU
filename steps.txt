@@ -47,3 +47,4 @@ Fix readings
 
 
 
+rails console
