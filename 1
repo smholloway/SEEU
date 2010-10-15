@@ -121,102 +121,74 @@
           <hr/>
           <div id="click-rules">
             <h3>Options</h3>
-
-            <div id="rules-if" style="display: block">
-              <span class="clickable" style="display:inline">if</span>
-            </div> <!-- rules-if --> 
-
             <div id="rules-conditionals" style="display: block">
-              <span class="clickable" style="display:none">then</span>
-              <span class="clickable" style="display:none">and</span>
-              <span class="clickable" style="display:none">or</span>
-            </div> <!-- rules-conditionals -->
+              <span class="clickable" style="visbility:visible">if</span>
+              <span class="clickable" style="visbility:hidden">then</span>
+              <span class="clickable">then</span>
+              <span class="clickable">and</span>
+              <span class="clickable">or</span>
+            </div> <!-- click-rules -->
+            <div class="clear" style="display:block"><br/></div>
 
             <div id="rules-operators">
-             <span class="clickable" style="display:none">greater than</span>
-             <span class="clickable" style="display:none">greater than or equal to</span>
-             <span class="clickable" style="display:none">equal to</span>
-             <span class="clickable" style="display:none">less than</span>
-             <span class="clickable" style="display:none">less than or equal to</span>
+             <span class="clickable">greater than</span>
+             <span class="clickable">greater than or equal to</span>
+             <span class="clickable">equal to</span>
+             <span class="clickable">less than</span>
+             <span class="clickable">less than or equal to</span>
             </div> <!-- rules-operators -->
+            <div class="clear" style="display:block"><br/></div>
 
             <div id="rules-sensors">
               <% Sensor.all.each do |s| %>
-              <span class="clickable" style="display:none"><%= s.name %></span>
+              <span class="clickable"><%= s.name %></span>
               <% end %>
             </div> <!-- rules-sensors -->
+            <div class="clear" style="display:block"><br/></div>
 
             <div id="rules-actuators">
               <% Actuator.all.each do |a| %>
-              <span class="clickable" style="display:none"><%= a.name %></span>
+              <span class="clickable"><%= a.name %></span>
               <% end %>
             </div> <!-- rules-actuators -->
+            <div class="clear" style="display:block"><br/></div>
 
-            <div id="rules-sensor-values">
+            <div id="rules-values">
               <% (-1..1).each do |i| %>
-              <span class="clickable" style="display:none"><%= i %></span>
+              <span class="clickable"><%= i %></span>
               <% end %>
               <div class="clear" style="display:block"><br/></div>
               <% (61..80).each do |i| %>
-              <span class="clickable" style="display:none"><%= i %></span>
+              <span class="clickable"><%= i %></span>
               <% end %>
               <div class="clear" style="display:block"><br/></div>
-              <span class="editable" style="display:none">Input #</span>
+              <span class="editable">Input #</span>
             </div> <!-- rules-values -->
+            <div class="clear" style="display:block"><br/></div>
 
-            <div id="rules-actuator-values">
-              <span class="editable" style="display:none">Input #</span>
-            </div> <!-- rules-actuator-values -->
           </div> <!-- click-rules -->
 
           <div id="click-rules-written">
             <h3>Rule</h3>
           </div>
-          
-          <%= form_tag do %>
-          <%= submit_tag("Create Rule") %>
-          <% end %>
 
           <script>
-            function enableButtons(clickedText, clickedDiv) {
+            function enableOtherButtons(inputText) {
               disableButtonsInDiv("click-rules");
-
-              if ( clickedDiv == "rules-if" ) {
+              if (inputText == "rules-conditionals") {
+                disableButtonsInDiv(inputText);
                 enableButtonsInDiv("rules-sensors");
-              } else if ( clickedDiv == "rules-conditionals" ) {
-                if ( clickedText == "then" ) {
-                  enableButtonsInDiv("rules-actuators");
-                } else {
-                  enableButtonsInDiv("rules-sensors");
-                }
-              } else if ( clickedDiv == "rules-sensor-values" ) {
-                enableButtonsInDiv("rules-conditionals");
-              } else if ( clickedDiv == "rules-actuator-values" ) {
-                //the rule ends with an actuator value
-              } else if ( clickedDiv == "rules-sensors" ) {
-                enableButtonsInDiv("rules-operators");
-              } else if ( clickedDiv == "rules-actuators" ) {
-                enableButtonsInDiv("rules-actuator-values");
-              } else if ( clickedDiv == "rules-operators" ) {
-                enableButtonsInDiv("rules-sensor-values");
-              } else {
-                alert("clickedText = " + clickedText + "\n clickedDiv = " + clickedDiv);
-              }
-            }
-
-            function enableProperButtons(inputText) {
-              disableButtonsInDiv("click-rules");
-              if (inputText == "rules-if") {
-                enableButtonsInDiv("rules-sensors");
-              } else if (inputText == "rules-conditionals") {
-                enableButtonsInDiv("rules-actuators");
               } else if (inputText == "rules-values") {
-                enableButtonsInDiv("rules-conditionals");
+                disableButtonsInDiv(inputText);
+                enableButtonsInDiv("rules-sensors");
               } else if (inputText == "rules-sensors") {
+                disableButtonsInDiv(inputText);
                 enableButtonsInDiv("rules-operators");
               } else if (inputText == "rules-actuators") {
-                enableButtonsInDiv("rules-values");
+                disableButtonsInDiv(inputText);
+                enableButtonsInDiv("rules-sensors");
               } else if (inputText == "rules-operators") {
+                disableButtonsInDiv(inputText);
                 enableButtonsInDiv("rules-values");
               } else {
                 alert(inputText);
@@ -224,23 +196,19 @@
             }
             function disableButtonsInDiv(inputDiv) {
               $('div#' + inputDiv + ' span').each(function () {
-                  //$(this).css('visibility', 'hidden');
-                  $(this).css('display', 'none');
+                  $(this).attr('visibility', 'hidden');
                 });
             }
             function enableButtonsInDiv(inputDiv) {
               $('div#' + inputDiv + ' span').each(function () {
-                  //$(this).css('visibility', 'visible');
-                  $(this).css('display', 'inline');
+                  $(this).attr('visibility', 'visibile');
                 });
             }
 
             $("span.clickable").click(function () { 
-              var buttonText = $(this).html();
-              var buttonDiv = $(this).parent("div").attr("id");
-
-              $("div#click-rules-written").append(buttonText+' ');
-              enableButtons( buttonText, buttonDiv );
+              var button_text = $(this).html()+' ';
+              $("div#click-rules-written").append(button_text);
+              enableOtherButtons( $(this).parent("div").attr("id") );
             });
             $("span.clickable").hover(function () {
               $(this).addClass("hilite");
@@ -249,19 +217,7 @@
             });
 
             $("span.editable").click(function () { 
-              var buttonDiv = $(this).parent("div").attr("id");
-
-              $(this).replaceWith('<form id="editable"><input type="text" size="8" maxlength="8" id="buttonText" value="'+$(this).html()+'"></form>');
-                $("form#editable").submit(function () {
-                  var buttonText = $("#buttonText").val();
-                  $("form#editable").remove();
-
-                  $("div#click-rules-written").append(buttonText +' ');
-                  enableButtons( buttonText, buttonDiv );
-
-                  return false;
-                });
-                return false;
+              $(this).replaceWith('<form><input type="text" size="8" maxlength="8" value="'+$(this).html()+'"></form>');
             });
             $("span.editable").hover(function () {
               $(this).addClass("hilite");

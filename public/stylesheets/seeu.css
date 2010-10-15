@@ -159,6 +159,30 @@ span.clickable {
 	-moz-border-radius: 2px;
 	-webkit-border-radius: 2px;
 }
+span.not-clickable {
+	padding: 5px;
+	cursor: default;
+	background: #616161;
+	border: 1px solid #a0a0a0;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+}
+span.editable{
+	padding: 5px;
+	cursor: pointer;
+	background: #f1f1f1;
+	border: 1px solid #a0a0a0;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+}
+span.not-editable{
+	padding: 5px;
+	cursor: default;
+	background: #616161;
+	border: 1px solid #a0a0a0;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+}
 span.hilite { 
 	background: yellow; 
 }
