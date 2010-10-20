@@ -5,37 +5,7 @@
     <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
     <title>SEEU: Sensor Enablement for End Users</title>
   	<%= stylesheet_link_tag 'seeu' %>
-    <script type="text/javascript" src="javascripts/prototype.js"></script>
-    <script type="text/javascript" src="javascripts/effects.js"></script>
   	<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
-    <script type="text/javascript">
-      function about() {
-        if (Element.empty('about-content')) {
-          new Ajax.Updater('about-content', 'rails/info/properties', {
-            method:     'get',
-            onFailure:  function() {Element.classNames('about-content').add('failure')},
-            onComplete: function() {new Effect.BlindDown('about-content', {duration: 0.25})}
-          });
-        } else {
-          new Effect[Element.visible('about-content') ? 
-            'BlindUp' : 'BlindDown']('about-content', {duration: 0.25});
-        }
-      }
-      
-      window.onload = function() {
-        $('search-text').value = '';
-        $('search').onsubmit = function() {
-          $('search-text').value = 'site:rubyonrails.org ' + $F('search-text');
-        }
-      }
-    </script>
-    <script type="text/javascript">
-	  $(document).ready(function(){
-	    if (true) {
-	      $('#topannounce').fadeIn('slow');
-	    }
-	  });
-    </script>
   </head>
 
   <body>
@@ -44,62 +14,13 @@
         <div id="header">
     		  <%= image_tag "/images/SEEU.png", :size => "800x117", :mouseover => "/images/SEEU-hover.png" %>
 	    	</div> <!-- header -->
-
 		
-        <!-- ####### -->
-        <!-- SENSORS -->
-        <!-- ####### -->
-    		<div id="left-box">
-		    	<span class="box-heading"><%= link_to 'Sensors', sensors_path %></span>
-		
-    			<% for sensor in @sensors %>
-		    	<hr>
-    			<div class="entry">
-		    		Name: <%= link_to sensor.name, sensor_path(sensor) %><br/>
-    				<img src="images/<%=h sensor.model %>.jpg"/><br/>
-		    		Description: <%=h sensor.description %><br/>
-			    	Recent Readings:<br/>
-    				<ul>
-		    			<% sensor.readings.reverse.each_with_index do |reading, count| %>
-				  		<li>Reading: <%=h reading.data %></li>
-			    		<% break if count >= 2 %>
-    					<% end %>
-		    		</ul>
-	    			Config URI: <a href="<%=h sensor.configuration_uri %>"><%=h sensor.configuration_uri %></a><br/>
-    			</div> <!-- entry -->
-		    	<% end %>
-	    	</div> <!-- left-box -->
-		
-
-        <!-- ######### -->
-        <!-- ACTUATORS -->
-        <!-- ######### -->
-    		<div id="right-box">
-		    	<span class="box-heading"><%= link_to 'Actuators', actuators_path %></span>
-			
-    			<% for actuator in @actuators %>
-    			<hr>
-    			<div class="entry">
-    				Name: <%= link_to actuator.name, actuator_path(actuator) %><br/>
-			    	<img src="images/<%=h actuator.model %>.jpg"/><br/>
-		    		Description: <%=h actuator.description %><br/>
-            <% if !actuator.command.data.nil? %>
-  		  		Command: <%=h actuator.command.data %> <br/>
-	      		<% end %>
-			    	Config URI: <a href="<%=h actuator.configuration_uri %>"><%=h actuator.configuration_uri %></a><br/>
-	    		</div> <!-- entry -->
-    			<% end %>
-	    	</div> <!-- right box -->
-		
-        <div style="clear:both"></div>
         <hr/>
-
 
         <!-- ##### -->
         <!-- RULES -->
         <!-- ##### -->
         <div id="rules">
-          <h3>Rules</h3>
           <% @rules.each do |rule| %>
             <%= rule.rule %><br />
           <% end %>

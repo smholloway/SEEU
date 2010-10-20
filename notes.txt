@@ -1,105 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html>
-  <head>
-    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-    <title>SEEU: Sensor Enablement for End Users</title>
-  	<%= stylesheet_link_tag 'seeu' %>
-    <script type="text/javascript" src="javascripts/prototype.js"></script>
-    <script type="text/javascript" src="javascripts/effects.js"></script>
-  	<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
-    <script type="text/javascript">
-      function about() {
-        if (Element.empty('about-content')) {
-          new Ajax.Updater('about-content', 'rails/info/properties', {
-            method:     'get',
-            onFailure:  function() {Element.classNames('about-content').add('failure')},
-            onComplete: function() {new Effect.BlindDown('about-content', {duration: 0.25})}
-          });
-        } else {
-          new Effect[Element.visible('about-content') ? 
-            'BlindUp' : 'BlindDown']('about-content', {duration: 0.25});
-        }
-      }
-      
-      window.onload = function() {
-        $('search-text').value = '';
-        $('search').onsubmit = function() {
-          $('search-text').value = 'site:rubyonrails.org ' + $F('search-text');
-        }
-      }
-    </script>
-    <script type="text/javascript">
-	  $(document).ready(function(){
-	    if (true) {
-	      $('#topannounce').fadeIn('slow');
-	    }
-	  });
-    </script>
-  </head>
+code = Rule.all.last.rule.to_s
+=> "if (Sensor.where(\"name = 'Sensor1'\").first.readings.last.data > 0.to_s) then\r\na = Actuator.where(\"name = 'actuator1'\").first;\r\na.command.data = 1;\r\na.save\r\nend"
 
-  <body>
-    <div id="page">
-      <div id="content">
-        <div id="header">
-    		  <%= image_tag "/images/SEEU.png", :size => "800x117", :mouseover => "/images/SEEU-hover.png" %>
-	    	</div> <!-- header -->
+result = eval(code)
+=> true
 
-		
-        <!-- ####### -->
-        <!-- SENSORS -->
-        <!-- ####### -->
-    		<div id="left-box">
-		    	<span class="box-heading"><%= link_to 'Sensors', sensors_path %></span>
-		
-    			<% for sensor in @sensors %>
-		    	<hr>
-    			<div class="entry">
-		    		Name: <%= link_to sensor.name, sensor_path(sensor) %><br/>
-    				<img src="images/<%=h sensor.model %>.jpg"/><br/>
-		    		Description: <%=h sensor.description %><br/>
-			    	Recent Readings:<br/>
-    				<ul>
-		    			<% sensor.readings.reverse.each_with_index do |reading, count| %>
-				  		<li>Reading: <%=h reading.data %></li>
-			    		<% break if count >= 2 %>
-    					<% end %>
-		    		</ul>
-	    			Config URI: <a href="<%=h sensor.configuration_uri %>"><%=h sensor.configuration_uri %></a><br/>
-    			</div> <!-- entry -->
-		    	<% end %>
-	    	</div> <!-- left-box -->
-		
 
-        <!-- ######### -->
-        <!-- ACTUATORS -->
-        <!-- ######### -->
-    		<div id="right-box">
-		    	<span class="box-heading"><%= link_to 'Actuators', actuators_path %></span>
-			
-    			<% for actuator in @actuators %>
-    			<hr>
-    			<div class="entry">
-    				Name: <%= link_to actuator.name, actuator_path(actuator) %><br/>
-			    	<img src="images/<%=h actuator.model %>.jpg"/><br/>
-		    		Description: <%=h actuator.description %><br/>
-            <% if !actuator.command.data.nil? %>
-  		  		Command: <%=h actuator.command.data %> <br/>
-	      		<% end %>
-			    	Config URI: <a href="<%=h actuator.configuration_uri %>"><%=h actuator.configuration_uri %></a><br/>
-	    		</div> <!-- entry -->
-    			<% end %>
-	    	</div> <!-- right box -->
-		
-        <div style="clear:both"></div>
-        <hr/>
+irb(main):> Rule.all.each do |r|
+irb(main):* code = r.rule.to_s
+irb(main):> result = eval(code)
+irb(main):> end
 
 
         <!-- ##### -->
         <!-- RULES -->
         <!-- ##### -->
         <div id="rules">
-          <h3>Rules</h3>
           <% @rules.each do |rule| %>
             <%= rule.rule %><br />
           <% end %>
@@ -109,18 +24,18 @@
 
         <div id="rules">
           <h3>Rules</h3>
-        
+
           <%= form_tag do %>
             <% operators_array = [">", ">=", "=", "=<", "<"] %>
             <% values_array = Array.new(16) { |i| 65+i } %>
             <% conditionals_array = ["", "and", "or"] %>
 
-            if <%= collection_select(:sensor, :sensor_id, Sensor.all, :name, :name ) %> 
+            if <%= collection_select(:sensor, :sensor_id, Sensor.all, :name, :name ) %>
               <%= select(:operator, :operator, operators_array) %>
               <%= select(:value, :value, values_array) %>
               <%= select(:conditional, :conditional, conditionals_array) %>
             <br/>
-            then set <%= collection_select(:actuator, :actuator_id, Actuator.all, :name, :name) %> to 
+            then set <%= collection_select(:actuator, :actuator_id, Actuator.all, :name, :name) %> to
               <%= select(:value, :value, values_array) %>
             <br/>
             <%= submit_tag("Create Rule") %>
@@ -134,7 +49,7 @@
 
             <div id="rules-if" style="display: block">
               <span class="clickable" style="display:inline">if</span>
-            </div> <!-- rules-if --> 
+            </div> <!-- rules-if -->
 
             <div id="rules-conditionals" style="display: block">
               <span class="clickable" style="display:none">then</span>
@@ -174,7 +89,7 @@
           <div id="click-rules-written">
             <h3>Rule</h3>
           </div>
-          
+
           <%= form_tag do %>
           <%= submit_tag("Create Rule") %>
           <% end %>
@@ -182,6 +97,7 @@
           <script>
             function enableButtons(clickedText, clickedDiv) {
               disableButtonsInDiv("click-rules");
+
 
               if ( clickedDiv == "rules-if" ) {
                 enableButtonsInDiv("rules-sensors");
@@ -237,9 +153,10 @@
                 });
             }
 
-            $("span.clickable").click(function () { 
+            $("span.clickable").click(function () {
               var buttonText = $(this).html();
               var buttonDiv = $(this).parent("div").attr("id");
+
 
               $("div#click-rules-written").append(buttonText+' ');
               enableButtons( buttonText, buttonDiv );
@@ -250,7 +167,7 @@
               $(this).removeClass("hilite");
             });
 
-            $("span.editable").click(function () { 
+            $("span.editable").click(function () {
               var buttonDiv = $(this).parent("div").attr("id");
 
               $(this).replaceWith('<form id="editable"><input type="text" size="8" maxlength="8" id="buttonText" value="'+$(this).html()+'"></form>');
@@ -275,11 +192,42 @@
 
        </div> <!-- rules -->
 
-      </div> <!-- content -->
-      
-      <div id="footer">
-        &copy; <a href="http://www.sethholloway.com/">Seth Holloway</a> - <a href="http://mpc.ece.utexas.edu/">MPC</a> - <a href="http://www.utexas.edu/">The University of Texas at Austin</a>
-      </div> <!-- footer -->
-    </div> <!-- page -->
-  </body>
-</html>
+
+
+
+
+  def run_rules()
+    a = Actuator.find(1).command
+    @reading = Reading.find(params[:id])
+
+    ### previous attempts
+    # works, but is not general
+#   if Sensor.find(1).readings.find(1).data.to_s == "1"
+#   end
+
+    # works, but is longer than accessing reading directly
+#   if Sensor.find(params[:sensor_id]).readings.find(params[:id]).data.to_s == "1"
+#   end
+
+    if Reading.find(params[:id]).data.to_s == "1"
+      a.data = "1"
+    else
+      a.data = "0"
+    end
+    a.save
+  end
+
+# maybe try something like this...
+# create a rules database
+# r = Rules.find(params[:sensor_id])
+# r.each do |r|
+#   #test rule
+# end
+#
+# if (Sensor.find(#).readings.last.data or Sensor.find(r[i].sensor).readings.last.data r[i].operator r[i].threshold)
+#   a = Actuator.find(r[i].actuator)
+#   a.command.data = r[i].output
+#   a.save
+# end
+
+

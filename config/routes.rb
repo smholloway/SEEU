@@ -1,5 +1,7 @@
 Seeu::Application.routes.draw do
 
+  resources :rules
+
   resources :actuators do
 		resource :commands
 	end

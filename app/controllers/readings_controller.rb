@@ -101,37 +101,11 @@ class ReadingsController < ApplicationController
 	private
 
 	def run_rules()
-		a = Actuator.find(1).command
-		@reading = Reading.find(params[:id])
-
-		### previous attempts
-		# works, but is not general
-#		if Sensor.find(1).readings.find(1).data.to_s == "1"
-#		end
-
-		# works, but is longer than accessing reading directly
-#		if Sensor.find(params[:sensor_id]).readings.find(params[:id]).data.to_s == "1" 
-#		end
-
-		if Reading.find(params[:id]).data.to_s == "1"
-			a.data = "1"
-		else
-			a.data = "0"
+		Rule.all.each do |r|
+			code = r.rule.to_s
+			result = eval(code)
 		end
-		a.save
 	end
 
-# maybe try something like this...
-#	create a rules database
-#	r = Rules.find(params[:sensor_id])
-#	r.each do |r|
-#		#test rule
-#	end
-#
-#	if (Sensor.find(#).readings.last.data or Sensor.find(r[i].sensor).readings.last.data r[i].operator r[i].threshold)
-#		a = Actuator.find(r[i].actuator)
-#		a.command.data = r[i].output
-#		a.save
-#	end
 end
 

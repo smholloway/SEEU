@@ -14,12 +14,16 @@ h1 {
 }
 a  {
 	color: #FF6900;
+	padding: 1px;
 }
 a:hover {
-	background-color: #03c;
-	background-color: #FF6900;
-	color: #FFFFFF;
+	color: #000;
 	text-decoration: none;
+	background-color: #f0f0f0;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	padding: 1px;
 }
 #page {
 	background-color: #f0f0f0;
