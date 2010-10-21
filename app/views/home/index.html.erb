@@ -96,7 +96,14 @@
         <!-- RULES -->
         <!-- ##### -->
         <div id="rules">
+		    	<span class="box-heading"><%= link_to 'Rules', rules_path %></span>
+          <hr/>
 
+          <% @rules.each do |rule| %>
+    			<div class="<%= cycle('rules-entry-odd', 'rules-entry-even') %>">
+            <%= rule.rule %><br />
+          </div> <!-- entry -->
+          <% end %>
         </div> <!-- rules -->
 
       </div> <!-- content -->
