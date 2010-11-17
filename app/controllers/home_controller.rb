@@ -1,7 +1,7 @@
 class HomeController < ApplicationController
   def index
-		@sensors = Sensor.all
-		@actuators = Actuator.all
+		@sensors = Sensor.paginate :page => params[:page], :order => 'created_at DESC', :per_page => 20 || 1
+		@actuators = Actuator.paginate :page => params[:page], :order => 'created_at DESC', :per_page => 20 || 1
 		@rules = Rule.all
 	
 		respond_to do |format|

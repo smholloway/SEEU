@@ -72,6 +72,7 @@
 	    			Config URI: <a href="<%=h sensor.configuration_uri %>"><%=h sensor.configuration_uri %></a><br/>
     			</div> <!-- entry -->
 		    	<% end %>
+          <%= will_paginate @sensors %>
 	    	</div> <!-- left-box -->
 		
 
@@ -93,6 +94,7 @@
 			    	Config URI: <a href="<%=h actuator.configuration_uri %>"><%=h actuator.configuration_uri %></a><br/>
 	    		</div> <!-- entry -->
     			<% end %>
+          <%= will_paginate @actuators %>
 	    	</div> <!-- right box -->
 		
         <div style="clear:both"></div>

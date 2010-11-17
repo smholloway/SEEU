@@ -2,7 +2,7 @@ class SensorsController < ApplicationController
   # GET /sensors
   # GET /sensors.xml
   def index
-    @sensors = Sensor.all
+    @sensors = Sensor.paginate :per_page => 20, :page => params[:page], :order => 'created_at DESC' || 1
 
     respond_to do |format|
       format.html # index.html.erb
