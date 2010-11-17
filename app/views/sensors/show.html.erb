@@ -26,14 +26,25 @@
 </p>
 
 <p>
+  <b>Readings:</b>
+  <div id="sensor-readings" style="display:none">
+    <%= render :partial => "readings/reading", :collection => @sensor.readings.reverse[0..2] %>
+    <hr/>
+  </div>
+  <div id="readings" style="display:none">
+    <%= render @sensor.readings %>
+    <hr/>
+  </div>
+  <ul id="sensor-readings">
+    <%= render :partial => "readings/reading", :collection => @readings %>
+  </ul> <!-- sensor-readings -->
+  <%= will_paginate @readings %>
+</p>
+
+<p>
   <b>Configuration uri:</b>
   <%= link_to @sensor.configuration_uri, @sensor.configuration_uri %>
 </p>
-
-<% @sensor.readings.reverse.each_with_index do |reading, count| %>
-  <p>Reading: <%=h reading.data %></p>
-  <% break if count >= 2 %>
-<% end %>
 
 <%= link_to 'Back', sensors_path %> | 
 <%= link_to 'Edit', edit_sensor_path(@sensor) %>

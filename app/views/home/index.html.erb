@@ -29,6 +29,14 @@
 	    }
 	  });
     </script>
+    <script type="text/javascript">
+    $(document).ready(
+      function(){
+        setInterval(function(){
+          $('#readings').load('/sensors/1/readings');
+        }, 3000);
+    });
+    </script>
   </head>
 
   <body>
@@ -49,19 +57,18 @@
     		<div id="left-box">
 		    	<span class="box-heading"><%= link_to 'Sensors', sensors_path %></span>
 		    	<hr>
-		
+
     			<% for sensor in @sensors %>
     			<div class="<%= cycle('device-entry-odd', 'device-entry-even') %>">
 		    		Name: <%= link_to sensor.name, sensor_path(sensor) %><br/>
     				<img src="images/<%=h sensor.model %>.jpg"/><br/>
 		    		Description: <%=h sensor.description %><br/>
-			    	Recent Readings:<br/>
-    				<ul>
-		    			<% sensor.readings.reverse.each_with_index do |reading, count| %>
-				  		<li>Reading: <%=h reading.data %></li>
-			    		<% break if count >= 2 %>
-    					<% end %>
-		    		</ul>
+			    	Recent Readings:
+
+            <ul id="sensor-readings">
+              <%= render :partial => "readings/reading", :collection => sensor.readings.reverse[0..2] %>
+            </ul> <!-- sensor-readings -->
+
 	    			Config URI: <a href="<%=h sensor.configuration_uri %>"><%=h sensor.configuration_uri %></a><br/>
     			</div> <!-- entry -->
 		    	<% end %>

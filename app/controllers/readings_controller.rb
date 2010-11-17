@@ -7,13 +7,14 @@ class ReadingsController < ApplicationController
   def index
 	  @sensor = Sensor.find(params[:sensor_id])
 		@readings = @sensor.readings
+    @readings = @sensor.readings.paginate :per_page => 10, :page => params[:page], :order => 'created_at DESC' || 1
 
 #    @readings = Reading.all
 #
-#    respond_to do |format|
-#      format.html # index.html.erb
-#      format.xml  { render :xml => @readings }
-#    end
+    respond_to do |format|
+      format.html # index.html.erb
+      format.xml  { render :xml => @readings }
+    end
   end
 
   # GET /readings/1
@@ -33,7 +34,6 @@ class ReadingsController < ApplicationController
   def new
 	  @sensor = Sensor.find(params[:sensor_id])
     @reading = @sensor.readings.build
-#		@reading = Reading.new
 
 #    respond_to do |format|
 #      format.html # new.html.erb
@@ -59,6 +59,7 @@ class ReadingsController < ApplicationController
       if @reading.save
 #        format.html { redirect_to(@reading, :notice => 'Reading was successfully created.') }
         format.html { redirect_to sensor_reading_url(@sensor, @reading) }
+				format.js
         format.xml  { render :xml => @reading, :status => :created, :location => @reading }
       else
         format.html { render :action => "new" }
@@ -76,6 +77,7 @@ class ReadingsController < ApplicationController
     respond_to do |format|
       if @reading.update_attributes(params[:reading])
         format.html { redirect_to sensor_reading_url(@sensor, @reading) }
+				format.js
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }

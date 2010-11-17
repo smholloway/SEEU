@@ -1,32 +1,46 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html>
-  <head>
-    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-    <title>SEEU: Sensor Enablement for End Users</title>
-  	<%= stylesheet_link_tag 'seeu' %>
-  	<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
-  </head>
+<!-- ##### -->
+<!-- RULES -->
+<!-- ##### -->
+<div id="rules">
 
-  <body>
-    <div id="page">
-      <div id="content">
-        <div id="header">
-    		  <%= image_tag "/images/SEEU.png", :size => "800x117", :mouseover => "/images/SEEU-hover.png" %>
-	    	</div> <!-- header -->
-		
-        <hr/>
 
-        <!-- ##### -->
-        <!-- RULES -->
-        <!-- ##### -->
-        <div id="rules">
-          <% @rules.each do |rule| %>
-            <%= rule.rule %><br />
-          <% end %>
-        </div>
+<!-- TAKE DATABASE RULE AND MAKE IT INTO INTERFACE -->
+<h4>Rule from DB</h4>
+<%= @rule.rule %><br/>
+<hr/>
+<h4>Processed DB Querry</h4>
+<% @rule_components = @rule.rule.split(" ") %>
+<% @rule_components.each do |rc|
+  if (rc.include? "Sensor.where")
+    @rule_sensors.push(rc)
+  end
+  if (rc.include? "readings.last.data")
+    @rule_sensor_data.push(rc)
+  end
+  if (rc.include? "Actuator.where")
+    @rule_actuators.push(rc)
+  end
+  if (rc.include? "command.data")
+    @rule_actuator_data.push(rc)
+  end
+end
 
-        <hr/>
+@rule_sensors         = @rule_sensors.last.split("'")[1]
+@rule_actuators       = @rule_actuators.last.split("'")[1]
+@rule_actuator_data   = @rule_actuator_data.last.split(/=/)[1].split(/[;]/)[0]
+@rule_sensor_operator = @rule_sensor_data.last.split("data")[1].split(".")[0].split(/[\d\w]/)[0]
+@rule_sensor_data     = @rule_sensor_data.last.split(/[<=>]/)[2].split(".")[0]
+%>
+
+if <%= @rule_sensors %>
+<%= @rule_sensor_operator %>
+<%= @rule_sensor_data %>
+then set 
+<%= @rule_actuators %> to <%= @rule_actuator_data %>
+
+<hr/>
+<div class="hidden" style="display:none">
+
 
         <div id="rules">
           <h3>Rules</h3>
@@ -194,13 +208,28 @@
           </script>
           <hr/>
 
-       </div> <!-- rules -->
+</div> <!-- hidden -->
+</div>
 
-      </div> <!-- content -->
-      
-      <div id="footer">
-        &copy; <a href="http://www.sethholloway.com/">Seth Holloway</a> - <a href="http://mpc.ece.utexas.edu/">MPC</a> - <a href="http://www.utexas.edu/">The University of Texas at Austin</a>
-      </div> <!-- footer -->
-    </div> <!-- page -->
-  </body>
-</html>
+<div id="madlibs">
+<h3>Mad-Libs</h3>
+
+<%= form_tag do %>
+  <% operators_array = [">", ">=", "=", "=<", "<"] %>
+  <% values_array = Array.new(16) { |i| 65+i } %>
+  <% conditionals_array = ["", "and", "or"] %>
+
+  if <%= collection_select(:sensor, :sensor_id, Sensor.all, :name, :name ) %>
+  <%= select(:operator, :operator, operators_array) %>
+  <%= select(:value, :value, values_array) %>
+  <%= select(:conditional, :conditional, conditionals_array) %>
+  <br/>
+  then set <%= collection_select(:actuator, :actuator_id, Actuator.all, :name, :name) %> to
+  <%= select(:value, :value, values_array) %>
+  <br/>
+  <%= submit_tag("Create Rule") %>
+<% end %>
+
+</div> <!-- madlibs -->
+
+</div> <!-- rules -->

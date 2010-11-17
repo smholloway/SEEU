@@ -14,6 +14,7 @@ class SensorsController < ApplicationController
   # GET /sensors/1.xml
   def show
     @sensor = Sensor.find(params[:id])
+    @readings = @sensor.readings.paginate :per_page => 10, :page => params[:page], :order => 'created_at DESC' || 1
 
     respond_to do |format|
       format.html # show.html.erb

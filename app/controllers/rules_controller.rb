@@ -83,21 +83,23 @@ class RulesController < ApplicationController
     end
   end
 
-	#---------#
-	#---------#
   # PLAYING /rules
   # PLAYING /rules.xml
   def playing 
     @rules     = Rule.all
+		@rule      = Rule.find(params[:id])
 		@sensors   = Sensor.all
 		@actuators = Actuator.all
+		
+		@rule_sensors = []
+		@rule_sensor_data = []
+		@rule_actuators = []
+		@rule_actuator_data = []
 
     respond_to do |format|
       format.html # playing.html.erb
       format.xml  { render :xml => @rules }
     end
   end
-	#---------#
-	#---------#
 
 end

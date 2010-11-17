@@ -1,6 +1,12 @@
 Seeu::Application.routes.draw do
 
-  resources :rules
+#  resources :rules
+#	match 'rules/playing' => 'rules#playing'
+	resources :rules do
+		member do
+			get 'playing'
+		end
+	end
 
   resources :actuators do
 		resource :commands
@@ -8,6 +14,10 @@ Seeu::Application.routes.draw do
 
   resources :sensors do
 	  resources :readings
+	end
+
+	resources :home do
+		resources :test
 	end
 
   # The priority is based upon order of creation:

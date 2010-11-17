@@ -230,4 +230,107 @@ irb(main):> end
 #   a.save
 # end
 
+########
+@readings = @sensor.readings.find(:all, :order => "created_at DESC", :limit => 3)
 
+
+
+########
+database -> interface work
+########
+r2components = Rule.find(2).rule.split(" ")
+r2sensors = []
+r2sensordata = []
+r2actuators = []
+r2actuatordata = []
+r2components.each do |r2c|
+	put 'r2c =',r2c
+	if (r2c.include? "Sensor.where")
+		r2sensors.push(r2c)
+	end
+	if (r2c.include? "readings.last.data")
+		r2sensordata.push(r2c)
+	end
+	if (r2c.include? "Actuator.where")
+		r2actuators.push(r2c)
+	end
+	if (r2c.include? "command.data")
+		r2actuatordata.push(r2c)
+	end
+end
+r2sensors
+r2sensordata
+r2actuators
+r2actuatordata
+
+######
+getting device name
+######
+r2sensors.last.split('.')[1].split("'")[1]
+## OR ##
+r2sensors.last.split("'")[1]
+r2actuators.last.split("'")[1]
+
+#####
+getting sensor operator
+#####
+r2sensordata.last.split("data")[1].split(".")[0].split(/[\d\w]/)[0]
+
+#####
+getting actuator operator is not necessary because it's always =
+#####
+
+#####
+getting sensor value
+######
+r2sensordata.last.split(/[<=>]/)[2].split(".")[0]
+r2sensordata.last.split(".")[5].split(/[<>=]/)[1]
+
+#####
+getting actuator value
+#####
+r2actuatordata.last.split(/=/)[1]
+
+
+###########
+<!-- TAKE DATABASE RULE AND MAKE IT INTO INTERFACE -->
+<%= @rule.rule %><br/>
+<h4>components</h4>
+<% @rule_components = @rule.rule.split(" ") %>
+<% @rule_components.each do |rc| %>
+rule_component = <%= rc %><br/>
+<% 
+  if (rc.include? "Sensor.where")
+    @rule_sensors.push(rc)
+  end
+  if (rc.include? "readings.last.data")
+    @rule_sensor_data.push(rc)
+  end
+  if (rc.include? "Actuator.where")
+    @rule_actuators.push(rc)
+  end
+  if (rc.include? "command.data")
+    @rule_actuator_data.push(rc)
+  end
+%>
+<% end %>
+<hr/>
+@rule_sensors.push(rc) = <%= @rule_sensors %><br/>
+@rule_sensor_data.push(rc) = <%= @rule_sensor_data %><br/>
+@rule_actuators.push(rc) = <%= @rule_actuators %><br/>
+@rule_actuator_data.push(rc) = <%= @rule_actuator_data %><br/>
+<hr/>
+<%
+@rule_sensors         = @rule_sensors.last.split("'")[1]
+@rule_actuators       = @rule_actuators.last.split("'")[1]
+@rule_actuator_data   = @rule_actuator_data.last.split(/=/)[1].split(/[;]/)[0]
+@rule_sensor_operator = @rule_sensor_data.last.split("data")[1].split(".")[0].split(/[\d\w]/)[0]
+@rule_sensor_data     = @rule_sensor_data.last.split(/[<=>]/)[2].split(".")[0]
+%>
+if <%= @rule_sensors %>
+<%= @rule_sensor_operator %>
+<%= @rule_sensor_data %>
+then set 
+<%= @rule_actuators %> to <%= @rule_actuator_data %>
+<hr/>
+<div class="hidden" style="display:none">
