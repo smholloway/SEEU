@@ -9,27 +9,6 @@
     <script type="text/javascript" src="javascripts/effects.js"></script>
   	<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
     <script type="text/javascript">
-      function about() {
-        if (Element.empty('about-content')) {
-          new Ajax.Updater('about-content', 'rails/info/properties', {
-            method:     'get',
-            onFailure:  function() {Element.classNames('about-content').add('failure')},
-            onComplete: function() {new Effect.BlindDown('about-content', {duration: 0.25})}
-          });
-        } else {
-          new Effect[Element.visible('about-content') ? 
-            'BlindUp' : 'BlindDown']('about-content', {duration: 0.25});
-        }
-      }
-    </script>
-    <script type="text/javascript">
-	  $(document).ready(function(){
-	    if (true) {
-	      $('#topannounce').fadeIn('slow');
-	    }
-	  });
-    </script>
-    <script type="text/javascript">
     $(document).ready(
       function(){
         setInterval(function(){
@@ -47,8 +26,19 @@
         <!-- HEADER -->
         <!-- ###### -->
         <div id="header">
-    		  <%= image_tag "/images/SEEU.png", :size => "800x117", :mouseover => "/images/SEEU-hover.png" %>
+    		  <%= #image_tag "/images/SEEU.png", :size => "800x117", :mouseover => "/images/SEEU-hover.png" 
+          %>
+          <h1>SEEU</h1>
 	    	</div> <!-- header -->
+        <script>
+          $('#header').hover(
+            function(){
+              $(this).addClass('hovering');
+            },
+            function(){
+              $(this).removeClass('hovering');
+          });
+        </script>
 
 		
         <!-- ####### -->
