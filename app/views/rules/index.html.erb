@@ -1,35 +1,38 @@
+<% title "Rules" %>
+
 <h1>Listing rules</h1>
 
-<table>
-  <tr>
-    <th>Rule</th>
-    <th>Description</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-
 <% @rules.each do |rule| %>
-  <tr>
-    <td><%= rule.rule %></td>
-    <td><%= rule.description %></td>
-    <td><%= link_to 'Show', rule %></td>
-    <td><%= link_to 'Edit', edit_rule_path(rule) %></td>
-    <td><%= link_to 'Destroy', rule, :confirm => 'Are you sure?', :method => :delete %></td>
-  </tr>
+<div class="rule-entry">
+	<div>
+		Rule <%= rule.id %><br/>
+		<%= rule.rule %>
+	</div>
+	<div>
+		Description<br/>
+		<%= rule.description %>
+	</div>
+	<div>
+		<%= link_to 'Show', rule %> | 
+		<%= link_to 'Edit', edit_rule_path(rule) %> | 
+		<%= link_to 'Destroy', rule, :confirm => 'Are you sure?', :method => :delete %>
+	</div>
+	<br/>
+</div> <!-- rule-entry -->
 <% end %>
-</table>
 
-<br />
+
+<div style="display:none">
 A rule will look like<br/>
 <pre>
-if Sensor.where("name = 'Sensor1'").first.readings.last.data > 0.to_s
-  a = Actuator.where("name = 'actuator1'").first
-  a.command.data = 1
-  a.save
-end
+if (Sensor.where("name = 'Sensor1'").first.readings.last.data > 0.to_s)
+  a = Actuator.where("name = 'actuator1'").first;
+  a.command.data = 1;
+  a.save;
+end;
 </pre>
-<br />
+</div>
+
 <br />
 
 <%= link_to 'Playing', new_rule_path %> | 

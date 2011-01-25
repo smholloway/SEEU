@@ -1,0 +1,12 @@
+<div class="<%= cycle('device-entry-odd', 'device-entry-even') %>">
+	Name: <%= link_to sensor.name, sensor_path(sensor) %><br/>
+ 	<img src="images/<%=h sensor.model %>.jpg"/><br/>
+	Description: <%=h sensor.description %><br/>
+ 	Recent Readings:<br/>
+
+  <div id="sensor-readings">
+    <%= render :partial => "readings/reading", :collection => sensor.readings.reverse[0..2] %>
+  </div> <!-- sensor-readings -->
+
+	Config URI: <a href="<%=h sensor.configuration_uri %>"><%=h sensor.configuration_uri %></a><br/>
+ 	</div> <!-- entry -->

@@ -1,0 +1,83 @@
+<!-- ############### -->
+<!-- Magnetic Poetry -->
+<!-- ############### -->
+<h3>Magnetic Poetry</h3>
+<div id="rules">
+
+<div id="selectors" style="display:none">
+<% operators_array = [">", ">=", "=", "<=", "<"] %>
+<% values_array = Array.new(16) { |i| 65+i } %>
+<% conditionals_array = ["", "and", "or"] %>
+
+if <%= collection_select(:sensor, :sensor_id, Sensor.all, :name, :name ) %>
+<%= select(:sensor_operator, :sensor_operator, operators_array) %>
+<%= select(:sensor_value, :sensor_value, values_array) %>
+<%#= select(:conditional, :conditional, conditionals_array) %>
+<br/>
+then set <%= collection_select(:actuator, :actuator_id, Actuator.all, :name, :name) %> to
+<%= select(:actuator_value, :actuator_value, values_array) %>
+</div> <!-- selectors -->
+
+  <div id="click-rules">
+    <div id="rules-if" style="display: block">
+      <p>
+      <span class="clickable" style="display:inline">if</span>
+      </p>
+    </div> <!-- rules-if --> 
+
+    <div id="rules-conditionals" style="display: block">
+      <p>
+      <span class="clickable" style="display:inline">then</span>
+      <span class="clickable" style="display:none">and</span>
+      <span class="clickable" style="display:none">or</span>
+      </p>
+    </div> <!-- rules-conditionals -->
+
+    <div id="rules-operators" style="display: block">
+      <p>
+      <span class="clickable" style="display:inline">greater than</span>
+      <span class="clickable" style="display:inline">greater than or equal to</span>
+      <span class="clickable" style="display:inline">equal to</span>
+      <span class="clickable" style="display:inline">less than</span>
+      <span class="clickable" style="display:inline">less than or equal to</span>
+      </p>
+    </div> <!-- rules-operators -->
+
+    <div id="rules-sensors" style="display:block">
+      <p>
+      <% Sensor.all.each do |s| %>
+      <span class="clickable" style="display:inline"><%= s.name %></span>
+      <% end %>
+      </p>
+    </div> <!-- rules-sensors -->
+
+    <div id="rules-actuators" style="display:block">
+      <p>
+      <% Actuator.all.each do |a| %>
+        <span class="clickable" style="display:inline"><%= a.name %></span>
+      <% end %>
+      </p>
+    </div> <!-- rules-actuators -->
+
+    <div id="rules-sensor-values" style="display:block">
+      <p>
+      <span class="editable" style="display:inline">Input #</span>
+      </p>
+    </div> <!-- rules-values -->
+
+    <div id="rules-actuator-values" style="display:block">
+      <p>
+      <span class="editable" style="display:inline">Input #</span>
+      </p>
+    </div> <!-- rules-actuator-values -->
+  </div> <!-- click-rules -->
+
+  <div id="click-rules-written">
+    <h4>Rule</h4>
+  </div>
+
+<%= form_for(@rule) do |f| %>
+  <%= f.submit :name => "Create Magnetic Rule", :id => "magnetic-create" %>
+<% end %>          
+
+</div> <!-- rules -->

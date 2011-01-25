@@ -1,0 +1,7 @@
+$('#readings').append('<%= escape_javascript(render :partial => "reading") %>');
+
+<% if @reading.nil? -%>
+  page.replace_html('readings', render(@reading)) 
+<% else -%>
+  $("#readings").html("<%= escape_javascript( render(:partial => "reading") ) %>");
+<% end -%>

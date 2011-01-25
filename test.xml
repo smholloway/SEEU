@@ -1,0 +1,21 @@
+<rule>
+  <condition>
+    <sensor>
+      Sensor1
+    </sensor>
+    <operator>
+      ==
+    </operator>
+    <value>
+      74
+    </value>
+  </condition>
+  <action>
+    <actuator>
+      Actuator1
+    </actuator>
+    <value>
+      74
+    </value>
+  </action>
+</rule>

@@ -1,0 +1,161 @@
+<!-- ############### -->
+<!-- Magnetic Poetry -->
+<!-- ############### -->
+<div id="selectors" style="display:none">
+<%= text_field :sensor, :sensor_id %>
+<%= text_field :sensor_operator, :sensor_operator %>
+<%= text_field :sensor_value, :sensor_value %>
+<%= text_field :actuator, :actuator_id %>
+<%= text_field :actuator_value, :actuator_value %>
+</div> <!-- selectors -->
+
+<h3>Magnetic Poetry</h3>
+<div id="rules">
+  <div id="click-rules">
+    <div id="rules-if" style="display: block">
+      <span class="clickable" style="display:inline">if</span>
+    </div> <!-- rules-if --> 
+
+    <div id="rules-conditionals" style="display: block">
+      <span class="clickable" style="display:none">then</span>
+    </div> <!-- rules-conditionals -->
+
+    <div id="rules-operators">
+      <span class="clickable" style="display:none">greater than</span>
+      <span class="clickable" style="display:none">greater than or equal to</span>
+      <span class="clickable" style="display:none">equal to</span>
+      <span class="clickable" style="display:none">less than</span>
+      <span class="clickable" style="display:none">less than or equal to</span>
+    </div> <!-- rules-operators -->
+
+    <div id="rules-sensors">
+      <% Sensor.all.each do |s| %>
+      <span class="clickable" style="display:none"><%= s.name %></span>
+      <% end %>
+    </div> <!-- rules-sensors -->
+
+    <div id="rules-actuators">
+      <% Actuator.all.each do |a| %>
+        <span class="clickable" style="display:none"><%= a.name %></span>
+      <% end %>
+    </div> <!-- rules-actuators -->
+
+    <div id="rules-sensor-values">
+      <span class="editable" style="display:none">Input #</span>
+    </div> <!-- rules-values -->
+
+    <div id="rules-actuator-values">
+      <span class="editable" style="display:none">Input #</span>
+    </div> <!-- rules-actuator-values -->
+  </div> <!-- click-rules -->
+
+	<h4>Rule</h4>
+  <div id="click-rules-written">   
+  </div>
+	
+	<%= form_for @rule, :html => { :id => 'magnetic_create' } do |f| %>
+		<div class="field" style="display:none">
+	    <%= f.label :rule %><br />
+	    <%= f.text_area :rule, :rows => 3 %>
+	  </div>
+
+		<div class="field">
+	    <%= f.label :description %><br />
+	    <%= f.text_area :description, :rows => 3 %>
+	  </div>
+
+	  <%= f.submit :name => "Create Magnetic Rule", :value => "Create Magnetic Rule", :id => "magnetic-create" %>
+	<% end %>
+
+<script>
+/*
+  function enableButtons(clickedText, clickedDiv) {
+    disableButtonsInDiv("click-rules");
+
+    if ( clickedDiv == "rules-if" ) {
+      enableButtonsInDiv("rules-sensors");
+    } else if ( clickedDiv == "rules-conditionals" ) {
+      if ( clickedText == "then" ) {
+        enableButtonsInDiv("rules-actuators");
+      } else {
+        enableButtonsInDiv("rules-sensors");
+      }
+    } else if ( clickedDiv == "rules-sensor-values" ) {
+      enableButtonsInDiv("rules-conditionals");
+    } else if ( clickedDiv == "rules-actuator-values" ) {
+    } else if ( clickedDiv == "rules-sensors" ) {
+      enableButtonsInDiv("rules-operators");
+    } else if ( clickedDiv == "rules-actuators" ) {
+      enableButtonsInDiv("rules-actuator-values");
+    } else if ( clickedDiv == "rules-operators" ) {
+      enableButtonsInDiv("rules-sensor-values");
+    } else {
+      alert("clickedText = " + clickedText + "\n clickedDiv = " + clickedDiv);
+    }
+  }
+
+  function enableProperButtons(inputText) {
+    disableButtonsInDiv("click-rules");
+    if (inputText == "rules-if") {
+      enableButtonsInDiv("rules-sensors");
+    } else if (inputText == "rules-conditionals") {
+      enableButtonsInDiv("rules-actuators");
+    } else if (inputText == "rules-values") {
+      enableButtonsInDiv("rules-conditionals");
+    } else if (inputText == "rules-sensors") {
+      enableButtonsInDiv("rules-operators");
+    } else if (inputText == "rules-actuators") {
+      enableButtonsInDiv("rules-values");
+    } else if (inputText == "rules-operators") {
+      enableButtonsInDiv("rules-values");
+    } else {
+      alert(inputText);
+    }
+  }
+  function disableButtonsInDiv(inputDiv) {
+    $('div#' + inputDiv + ' span').each(function () {
+    $(this).css('display', 'none');
+    });
+  }
+  function enableButtonsInDiv(inputDiv) {
+    $('div#' + inputDiv + ' span').each(function () {
+      $(this).css('display', 'inline');
+    });
+  }
+
+  $("span.clickable").click(function () { 
+    var buttonText = $(this).html();
+    var buttonDiv = $(this).parent("div").attr("id");
+
+    $("div#click-rules-written").append(buttonText+' ');
+    enableButtons( buttonText, buttonDiv );
+  });
+  $("span.clickable").hover(function () {
+    $(this).addClass("hilite");
+    }, function () {
+      $(this).removeClass("hilite");
+    });
+
+  $("span.editable").click(function () { 
+    var buttonDiv = $(this).parent("div").attr("id");
+    $(this).replaceWith('<form id="editable"><input type="text" size="8" maxlength="8" id="buttonText" value="'+$(this).html()+'"></form>');
+    $("form#editable").submit(function () {
+      var buttonText = $("#buttonText").val();
+      $("form#editable").remove();
+
+      $("div#click-rules-written").append(buttonText +' ');
+      enableButtons( buttonText, buttonDiv );
+
+      return false;
+    });
+    return false;
+  });
+  $("span.editable").hover(function () {
+    $(this).addClass("hilite");
+    }, function () {
+    $(this).removeClass("hilite");
+  });
+*/
+</script>
+
+</div> <!-- rules -->

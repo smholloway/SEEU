@@ -1,0 +1,23 @@
+<%= render(:partial => "sensor", :object => @sensors.last) %>
+
+	<% for sensor in @sensors %>
+ 	<div class="<%= cycle('device-entry-odd', 'device-entry-even') %>">
+ 		Name: <%= link_to sensor.name, sensor_path(sensor) %><br/>
+		<img src="images/<%=h sensor.model %>.jpg"/><br/>
+ 		Description: <%=h sensor.description %><br/>
+   	Recent Readings:<br/>
+    <hr/>
+    <div id="readings">
+      <%= render sensor.readings.reverse[0..2] %>
+    </div> <!-- readings -->
+    <hr/>
+
+   	<ul>
+			<% sensor.readings.reverse.each_with_index do |reading, count| %>
+	 		<li>Reading: <%=h reading.data %></li>
+	 		<% break if count >= 2 %>
+  		<% end %>
+ 		</ul>
+		Config URI: <a href="<%=h sensor.configuration_uri %>"><%=h sensor.configuration_uri %></a><br/>
+ 		</div> <!-- entry -->
+   	<% end %>

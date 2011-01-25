@@ -1,0 +1,3 @@
+<% unless reading.nil? %>
+  <li class="reading-data"><%= reading.data %> (<%= time_ago_in_words(reading.updated_at) %> ago)</li>
+<% end %>
