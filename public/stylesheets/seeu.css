@@ -269,10 +269,13 @@ span.hilite {
 
 div#madlibs, div#magnetic {
 	margin: auto;
-	width: 96%;
-	min-width: 800px;
+	width: 98%;
+	min-width: 700px;
 	padding: 5px;
 	background: #FFFFFF;
+}
+#magnetic-create {
+  display: none;
 }
 
 .more {

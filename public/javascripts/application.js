@@ -66,6 +66,38 @@ $(document).ready(function() {
     var buttonDiv = $(this).parent("div").attr("id");
 
     $("div#click-rules-written").append(buttonText+' ');
+
+    if ( buttonDiv == "rules-operators" ) {
+      switch(buttonText) {
+        case "greater than":
+          buttonText = ">";
+          break; 
+        case "less than":
+          buttonText = "<";
+          break; 
+        case "greater than or equal to":
+          buttonText = ">=";
+          break; 
+        case "less than or equal to":
+          buttonText = "<=";
+          break; 
+        case "equal to":
+          buttonText = "==";
+          break; 
+        default:
+          buttonText = ">";
+      }
+      $('#sensor_operator_sensor_operator').val(buttonText);
+    } else if ( buttonDiv == "rules-sensors" ) {
+      $('#sensor_sensor_id').val(buttonText);
+    } else if ( buttonDiv == "rules-actuators" ) {
+      $('#actuator_actuator_id').val(buttonText);
+    } else if ( buttonDiv == "rules-sensor-values" ) {
+      $('#sensor_value_sensor_value').val(buttonText);
+    } else if ( buttonDiv == "rules-actuator-values" ) {
+      $('#actuator_value_actuator_value').val(buttonText);
+    }
+
     enableButtons( buttonText, buttonDiv );
   });
   $("span.clickable").hover(function () {
@@ -77,9 +109,19 @@ $(document).ready(function() {
   $("span.editable").click(function () { 
     var buttonDiv = $(this).parent("div").attr("id");
     $(this).replaceWith('<form id="editable"><input type="text" size="8" maxlength="8" id="buttonText" value="'+$(this).html()+'"></form>');
+    $('#buttonText').focus();
+
     $("form#editable").submit(function () {
       var buttonText = $("#buttonText").val();
+      var buttonDiv = $(this).parent("div").attr("id");
       $("form#editable").remove();
+
+      if ( buttonDiv == "rules-sensor-values" ) {
+        $('#sensor_value_sensor_value').val(buttonText);
+      } else if ( buttonDiv == "rules-actuator-values" ) {
+        $('#actuator_value_actuator_value').val(buttonText);
+        enableRuleCreation(); 
+      }
 
       $("div#click-rules-written").append(buttonText +' ');
       enableButtons( buttonText, buttonDiv );
@@ -94,6 +136,12 @@ $(document).ready(function() {
     $(this).removeClass("hilite");
   });
 
+
+
+  function enableRuleCreation() {
+    $('#magnetic-create').css('display', 'all');
+    $('#magnetic-create').toggle();
+  }
 
 
   function enableButtons(clickedText, clickedDiv) {
