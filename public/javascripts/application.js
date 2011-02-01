@@ -1,8 +1,6 @@
-// Place your application-specific JavaScript functions and classes here
-// This file is automatically included by javascript_include_tag :defaults
 $(document).ready(function() {
 	$('#madlib_create').submit(function() {
-		alert('madlib_create');			
+		//alert('madlib_create');			
 		var sensor_id = $('#sensor_sensor_id').val();
 		var sensor_comparator = $('#sensor_operator_sensor_operator').val();
 		var sensor_value = $('#sensor_value_sensor_value').val();
@@ -11,13 +9,13 @@ $(document).ready(function() {
 	
 		var generatedRule = generateRule(sensor_id, sensor_comparator, sensor_value, actuator_id, actuator_value);
 		$('textarea#rule_rule').val(generatedRule);
-		alert("new_rule submitted: \n" + generatedRule);
+		//alert("new_rule submitted: \n" + generatedRule);
 
 		return true;
 	});
 	
 	$('#magnetic_create').submit(function() {
-		alert('magnetic_create');			
+		//alert('magnetic_create');			
 		var rule = $("div#click-rules-written").text();
 
 		var sensor_id = $('#sensor_sensor_id').val();
@@ -29,9 +27,9 @@ $(document).ready(function() {
 		var generatedRule = generateMagneticRule(rule);
 		var generatedRule = generateRule(sensor_id, sensor_comparator, sensor_value, actuator_id, actuator_value);
 		$('textarea#rule_rule').val(generatedRule);
-		alert("new_rule submitted: \n" + generatedRule);
+		//alert("new_rule submitted: \n" + generatedRule);
 
-		return false;
+		return true;
 	});
 	
 	function generateRule(sensor_id, sensor_comparator, sensor_value, actuator_id, actuator_value) {
@@ -60,6 +58,12 @@ $(document).ready(function() {
       $(this).css('display', 'inline');
     });
   }
+
+  $("select#actuator_value_actuator_value").click(function () { 
+    //alert('clicked actuator_value_actuator_value');
+    enableMadlibRuleCreation();
+  });
+
 
   $("span.clickable").click(function () { 
     var buttonText = $(this).html();
@@ -100,6 +104,7 @@ $(document).ready(function() {
 
     enableButtons( buttonText, buttonDiv );
   });
+
   $("span.clickable").hover(function () {
     $(this).addClass("hilite");
     }, function () {
@@ -131,6 +136,7 @@ $(document).ready(function() {
     return false;
   });
   $("span.editable").hover(function () {
+
     $(this).addClass("hilite");
     }, function () {
     $(this).removeClass("hilite");
@@ -138,11 +144,23 @@ $(document).ready(function() {
 
 
 
-  function enableRuleCreation() {
+  function enableRuleCreation(interfaceToEnable) {
+    if (interfaceToEnable == "madlib") {
+      enableMadlibRuleCreation();
+    } else {
+      enableMagneticRuleCreation();
+    }
+  }
+
+  function enableMadlibRuleCreation() {
+    $('#madlib-create').css('display', 'all');
+    $('#madlib-create').toggle();
+  }
+
+  function enableMagneticRuleCreation() {
     $('#magnetic-create').css('display', 'all');
     $('#magnetic-create').toggle();
   }
-
 
   function enableButtons(clickedText, clickedDiv) {
     disableButtonsInDiv("click-rules");

@@ -94,7 +94,17 @@
 	<span class="box-heading"><%= link_to 'Rules', rules_path %></span>
 	<% @rules[0..4].each do |rule| %>
 	<div class="<%= cycle('rules-entry-odd', 'rules-entry-even') %>">
-		<%= rule.rule %><br />
+		<div class="rule-name">
+		  <%= link_to "Rule #{rule.id}", rule %><br />
+        </div> <!-- device-name -->
+		<div class="rule-description">
+		  Description: 
+          <% if rule.description.blank? %>
+            None
+          <% else %>
+			<%= truncate(strip_tags(rule.description), :length => 140) %>
+          <% end %>
+        </div> <!-- rule-description -->
 	</div> <!-- entry -->
 	<% end %>
 	

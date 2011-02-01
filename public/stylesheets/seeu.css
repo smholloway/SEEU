@@ -26,22 +26,22 @@ div#header {
   border: 4px solid #FF6900;
   background: #FFFFFF;
   color: #FF6900;
-  line-height: 117px;
+  line-height: 72px;
   width: 788px;
-  font-size: 64px;
-	text-align: center;
-	border-radius: 3px;
-	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
+  font-size: 36px;
+  text-align: center;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 div#header a {
-	display: block;
+  display: block;
   color: #FF6900;
-	text-decoration: none;
+  text-decoration: none;
 }
 div#header a:hover {
-	background: #FF6900;
-	color: #FFF;
+  background: #FF6900;
+  color: #FFF;
 }
 
 #page {
@@ -122,7 +122,7 @@ div.device-description {
 	float: left;
 }
 div.device-readings-header {
-	margin: 3px auto -10rupx;
+	margin: 3px auto -10px;
 }
 ul.sensor-readings {
 	list-style-type: circle;
@@ -274,7 +274,7 @@ div#madlibs, div#magnetic {
 	padding: 5px;
 	background: #FFFFFF;
 }
-#magnetic-create {
+#magnetic-create, #madlib-create {
   display: none;
 }
 
