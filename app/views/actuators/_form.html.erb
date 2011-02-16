@@ -17,7 +17,7 @@
   </div>
   <div class="field">
     <%= f.label :description %><br />
-    <%= f.text_area :description %>
+    <%= f.text_area :description, :rows => 3 %>
   </div>
   <div class="field">
     <%= f.label :manufacturer %><br />
@@ -28,6 +28,12 @@
     <%= f.text_field :model %>
   </div>
   <div class="field">
+    <%= f.label :valid_values %><br />
+    <%= f.text_field :valid_values %> (number1..number2 OR value1,value2,value3)
+  </div>
+  
+<div style="display:none">
+  <div class="field">
     <%= f.label :data_uri %><br />
     <%= f.text_field :data_uri %>
   </div>
@@ -35,6 +41,8 @@
     <%= f.label :configuration_uri %><br />
     <%= f.text_field :configuration_uri %>
   </div>
+</div> <!-- display:none -->
+
   <div class="actions">
     <%= f.submit %>
   </div>

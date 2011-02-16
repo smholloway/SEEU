@@ -1,0 +1,18 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @manufacturer.name %>
+</p>
+<% if @models.nil? %>
+<% else %>
+<p>
+  <b>Models:</b>
+  <% @models.each do |model| %>
+  <%= link_to model.name, manufacturer_model_path(@manufacturer, model) %><br/>
+  <% end %>
+</p>
+<% end %>
+
+<%= link_to 'Back', manufacturers_path %> | 
+<%= link_to 'Edit', edit_manufacturer_path(@manufacturer) %>

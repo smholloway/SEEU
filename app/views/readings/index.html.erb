@@ -1,34 +1,23 @@
+<% title "Readings" %>
 <h1>Readings for <%=h @sensor.name %></h1>
 
 <h4>Readings</h4>
-<div id="readings" style="display:none">
-<%= render :partial => "reading", :collection => @readings[0..2] %>
-<hr/>
-</div> <!-- readings -->
+<div id="readings" style="display:all">
 
-<div id="sensor-readings" style="display:none">
+<div id="sensor-readings" style="display:all">
 <%= render :partial => "readings/reading", :collection => @readings %>
 <%= will_paginate @readings %>
 </div> <!-- sensor-readings -->
+</div> <!-- readings -->
 
-<table>
-  <tr>
-    <th>Data</th>
-    <th>Time</th>
-    <th>Show/Edit/Destroy</th>
-  </tr>
+<div style="display:none">
+<% @sensor.readings.each do |reading| %>
+      <%= link_to 'Show', sensor_reading_path(@sensor, reading) %>/
+      <%= link_to 'Edit', edit_sensor_reading_path(@sensor, reading) %>/
+      <%= link_to 'Destroy', sensor_reading_path(@sensor, reading), :confirm => 'Are you sure?', :method => :delete %>
+<% end %>
+</div> <!-- display:none -->
 
-  <% @readings.each do |reading|  %>
-  <tr>
-    <td><%=h reading.data %></td>
-    <td><%=h reading.updated_at %></td>
-    <td><%= link_to 'Show', sensor_reading_path(@sensor, reading) %>/<%= link_to 'Edit', edit_sensor_reading_path(@sensor, reading) %>/<%= link_to 'Destroy', sensor_reading_path(@sensor, reading),
-            :confirm => 'Are you sure?', :method => :delete %>
-    </td>
-  </tr>
-  <% end %>
-</table>
-  <%= will_paginate @readings %>
 
 <br/>
 

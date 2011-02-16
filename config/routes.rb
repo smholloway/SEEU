@@ -1,5 +1,9 @@
 Seeu::Application.routes.draw do
 
+  resources :manufacturers do
+    resources :models
+  end
+  
 #  resources :rules
 #	match 'rules/playing' => 'rules#playing'
 	resources :rules do
@@ -9,16 +13,22 @@ Seeu::Application.routes.draw do
 	end
 
   resources :actuators do
-		resource :commands
-	end
+	resource :commands
+  end
 
   resources :sensors do
-	  resources :readings
-	end
+	resources :readings
+  end
 
-	resources :home do
-		resources :test
-	end
+  resources :home do
+	resources :test
+  end
+
+  match '/sensors/:id/valid_values' => 'sensors#valid_values'
+  match '/sensors/get_id_from_name/:name' => 'sensors#get_id_from_name'
+  match '/sensors/get_values_from_name/:name' => 'sensors#get_values_from_name'
+
+  match '/actuators/get_values_from_name/:name' => 'actuators#get_values_from_name'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
@@ -71,8 +81,6 @@ Seeu::Application.routes.draw do
   # just remember to delete public/index.html.
   # root :to => "welcome#index"
 	root :to => "home#index"
-
-  # See how all your routes lay out with "rake routes"
 
   # This is a legacy wild controller route that's not recommended for RESTful applications.
   # Note: This route will make all actions in every controller accessible via GET requests.

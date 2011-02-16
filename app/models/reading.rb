@@ -7,5 +7,5 @@ class Reading < ActiveRecord::Base
 
 	validates :data, :presence => true
 
-	default_scope :order => 'readings.created_at ASC'
+	default_scope :order => 'readings.created_at DESC'
 end

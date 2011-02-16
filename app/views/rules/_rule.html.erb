@@ -1,0 +1,14 @@
+    <div class="<%= cycle('rules-entry-odd', 'rules-entry-even') %>">
+        <div class="rule-name">
+          <%= link_to "Rule #{rule.id}", rule %><br />
+        </div> <!-- device-name -->
+        <div class="rule-description">
+          Description:
+          <% if rule.description.blank? %>
+            None
+          <% else %>
+            <%= truncate(strip_tags(rule.description), :length => 140) %>
+          <% end %>
+        </div> <!-- rule-description -->
+    </div> <!-- entry -->
+

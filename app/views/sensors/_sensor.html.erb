@@ -1,10 +1,28 @@
-<div class="sensor">
-  <div class="sensor_name">
-    <h4><%=h sensor.name %></h4>
-    <span><%=h sensor.description %></span>
-    <span><%=h sensor.manufacturer %></span>
-    <span><%=h sensor.model %></span>
-    <span><%=h link_to sensor.data_uri, sensor.data_uri %></span>
-    <span><%=h link_to sensor.configuration_uri, sensor.configuration_uri %></span>
-  </div> <!-- sensor_name -->
-</table> <!-- sensor -->
+<div class="<%= cycle('device-entry-odd', 'device-entry-even') %>">
+    <div class="device-name">
+        <%= link_to sensor.name, sensor_path(sensor) %>
+    </div> <!-- device-name -->
+
+    <div class="device-image">
+        <img src="images/<%=h sensor.model %>.jpg"/>
+    </div> <!-- device-image -->
+
+    <div class="device-description">
+        <%= truncate(strip_tags(sensor.description), :length => 140) %>
+
+        <div class="device-readings">
+            <div class="device-readings-header">
+              <%= link_to "Recent Readings", sensor_readings_path(sensor) %>:
+            </div>
+            <ul class="sensor-readings">
+                <%= render :partial => "readings/reading", :collection => sensor.readings.reverse[0..2] %>
+            </ul> <!-- sensor-readings -->
+        </div> <!-- device-readings -->
+    </div> <!-- device-description -->
+
+    <div style="clear:both"></div>
+
+    <div style="display:none">
+        Config URI: <%= link_to sensor.configuration_uri, sensor.configuration_uri %></a>
+    </div>
+</div> <!-- device-entry -->

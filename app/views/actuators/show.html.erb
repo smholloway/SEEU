@@ -9,7 +9,9 @@
 
 <p>
   <b>Description:</b>
+  <% if @actuator.description.nil? %>None<% else %>
   <%= @actuator.description %>
+  <% end %>
 </p>
 
 <p>
@@ -23,18 +25,13 @@
 </p>
 
 <p>
-  <b>Command:</b>
+  <b>Valid Values:</b>
+  <%= @actuator.valid_values %>
+</p>
+
+<p>
+  <b><%= link_to "Command", @actuator.data_uri %>:</b>
   <%= @actuator.command.data rescue nil %>
-</p>
-
-<p>
-  <b>Data uri:</b>
-  <%= link_to @actuator.data_uri, @actuator.data_uri %>
-</p>
-
-<p>
-  <b>Configuration uri:</b>
-  <%= link_to @actuator.configuration_uri, @actuator.configuration_uri %>
 </p>
 
 

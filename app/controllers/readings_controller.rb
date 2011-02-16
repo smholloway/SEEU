@@ -1,6 +1,6 @@
 class ReadingsController < ApplicationController
 
-	before_filter :run_rules
+#	before_filter :run_rules
 
   # GET /readings
   # GET /readings.xml
@@ -32,7 +32,7 @@ class ReadingsController < ApplicationController
   # GET /readings/new
   # GET /readings/new.xml
   def new
-	  @sensor = Sensor.find(params[:sensor_id])
+	@sensor = Sensor.find(params[:sensor_id])
     @reading = @sensor.readings.build
 
 #    respond_to do |format|
@@ -50,16 +50,13 @@ class ReadingsController < ApplicationController
   # POST /readings
   # POST /readings.xml
   def create
-		@sensor = Sensor.find(params[:sensor_id])
+	@sensor = Sensor.find(params[:sensor_id])
     @reading = @sensor.readings.build(params[:reading])
-
-# 	@reading = Reading.new(params[:reading])
 
     respond_to do |format|
       if @reading.save
-#        format.html { redirect_to(@reading, :notice => 'Reading was successfully created.') }
         format.html { redirect_to sensor_reading_url(@sensor, @reading) }
-				format.js
+		format.js
         format.xml  { render :xml => @reading, :status => :created, :location => @reading }
       else
         format.html { render :action => "new" }

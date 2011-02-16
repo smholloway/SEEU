@@ -3,8 +3,8 @@ class RulesController < ApplicationController
   # GET /rules.xml
   def index
     @rules     = Rule.all
-		@sensors   = Sensor.all
-		@actuators = Actuator.all
+	@sensors   = Sensor.all
+	@actuators = Actuator.all
 
     respond_to do |format|
       format.html # index.html.erb
@@ -27,6 +27,8 @@ class RulesController < ApplicationController
   # GET /rules/new.xml
   def new
     @rule = Rule.new
+	  @sensors   = Sensor.all
+	  @actuators = Actuator.all
 
     respond_to do |format|
       format.html # new.html.erb
@@ -99,6 +101,14 @@ class RulesController < ApplicationController
     respond_to do |format|
       format.html # playing.html.erb
       format.xml  { render :xml => @rules }
+    end
+  end
+
+
+  def for_sensorid
+    @sensors = Sensor.find( :all, :conditions => [" sensor_id = ?", params[:id]]  ).sort_by{ |k| k['name'] }    
+    respond_to do |format|
+      format.json  { render :json => @sensors }
     end
   end
 

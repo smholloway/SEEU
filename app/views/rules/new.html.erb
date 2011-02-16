@@ -1,20 +1,24 @@
 <% title "New Rule" %>
+<% test = "magnetic" %>
+<% test = "madlibs" %>
 
 <h1>New rule</h1>
 
-
-<div id="madlibs">
-  <%= render 'madlibs' %>
-</div> <!-- madlibs -->
-
-
-<div id="magnetic">
-  <%= render 'magnetic_advanced' %>
-</div> <!-- magnetic -->
-
-<hr/>
-
-<%#= render 'form' %>
+<% if test == "test" %>
+  <div id="test">
+    <%= render 'test' %>
+  </div> <!-- test -->
+<% elsif test == "madlibs" %>
+  <div id="madlibs">
+    <%= render 'madlibs' %>
+  </div> <!-- madlibs -->
+<% elsif test == "magnetic" %>
+  <div id="magnetic">
+    <%= render 'magnetic_advanced' %>
+  </div> <!-- magnetic -->
+<% else %>
+  <%#= render 'form' %>
+<% end %>
 
 <br/>
 

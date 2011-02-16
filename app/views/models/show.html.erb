@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Model Name:</b>
+  <%= @model.name %>
+</p>
+
+<p>
+  <b>Manufacturer:</b>
+  <%= @model.manufacturer.name %>
+</p>
+
+<%= link_to 'Back', manufacturer_models_path(@manufacturer) %> |
+<%= link_to 'Edit', edit_manufacturer_model_path(@manufacturer, @model) %>

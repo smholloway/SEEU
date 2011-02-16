@@ -1,10 +1,9 @@
-<% if @command.nil? %>
+<% title "Command" %>
+
+<% if @command.nil? or @command.data.nil? %>
 OFF
-  <% else %>
-  <% if @command.data.nil?  %>
-0
-  <% end %>
-<%=h @command.data rescue nil %>
+<% else %>
+<%= @command.data rescue nil %>
 <% end %>
 
 <br/>

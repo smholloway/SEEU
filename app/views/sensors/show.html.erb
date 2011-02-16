@@ -22,19 +22,20 @@
   <%= @sensor.model %>
 </p>
 
-<p>
+<p style="display:none">
   <b>Data uri:</b>
   <%= link_to @sensor.data_uri, @sensor.data_uri %>
 </p>
 
 <p>
-  <b>Readings:</b>
+  <b>Valid Values:</b>
+  <%= @sensor.valid_values %>
+</p>
+
+<p>
+  <b><%= link_to "Readings", sensor_readings_path(@sensor) %></b>:
   <div id="sensor-readings" style="display:none">
     <%= render :partial => "readings/reading", :collection => @sensor.readings.reverse[0..2] %>
-    <hr/>
-  </div>
-  <div id="readings" style="display:none">
-    <%= render @sensor.readings %>
     <hr/>
   </div>
   <ul id="sensor-readings">
@@ -43,10 +44,11 @@
   <%= will_paginate @readings %>
 </p>
 
-<p>
+<p style="display:none">
   <b>Configuration uri:</b>
   <%= link_to @sensor.configuration_uri, @sensor.configuration_uri %>
 </p>
 
 <%= link_to 'Back', sensors_path %> | 
-<%= link_to 'Edit', edit_sensor_path(@sensor) %>
+<%= link_to 'Edit', edit_sensor_path(@sensor) %> | 
+<%= link_to 'Destroy', sensor_path(@sensor), :confirm => 'Are you sure?', :method => :delete %>

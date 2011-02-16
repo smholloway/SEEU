@@ -1,0 +1,26 @@
+    <div class="<%= cycle('device-entry-odd', 'device-entry-even') %>">
+        <div class="device-name">
+            <%= link_to actuator.name, actuator_path(actuator) %>
+        </div> <!-- device-name -->
+
+        <div class="device-image">
+            <img src="images/<%=h actuator.model %>.jpg"/>
+        </div> <!-- device-image -->
+
+        <div class="device-description">
+            <%= truncate(strip_tags(actuator.description), :length => 140) %><br/>
+
+            <% if !actuator.command.data.nil? %>
+            <div class="device-readings">
+                <%= link_to "Command", actuator_commands_path(actuator) %>:
+                <%= actuator.command.data %>
+            </div> <!-- device-readings -->
+            <% end %>
+        </div> <!-- device-description -->
+
+        <div style="clear:both"></div>
+
+        <div style="display:none">
+            Config URI: <a href="<%=h actuator.configuration_uri %>"><%=h actuator.configuration_uri %></a>
+        </div>
+    </div> <!-- device-entry -->

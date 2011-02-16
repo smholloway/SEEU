@@ -1,15 +1,16 @@
 <%= form_tag do %>
-  <% operators_array = [">", ">=", "=", "=<", "<"] %>
-  <% values_array = Array.new(16) { |i| 65+i } %>
-  <% conditionals_array = ["", "and", "or"] %>
 
-  if <%= collection_select(:sensor, :sensor_id, Sensor.all, :name, :name ) %>
-  <%= select(:operator, :operator, operators_array) %>
-  <%= select(:value, :value, values_array) %>
-  <%= select(:conditional, :conditional, conditionals_array) %>
+  Sensors:
+  <%= collection_select(:sensor, :sensor_id, Sensor.all, :name, :name, options = { :prompt => "" } ) %>
   <br/>
-  then set <%= collection_select(:actuator, :actuator_id, Actuator.all, :name, :name) %> to
-  <%= select(:value, :value, values_array) %>
+  <input name="sensor_chosen" id="sensor_chosen" type="hidden" value="1"/>
+  Readings:
+  <%= collection_select(:readings, :readings_id, Reading.find_all_by_sensor_id(:sensor_id), :id, :data, options = { :prompt => "" } ) %>
   <br/>
-  <%= submit_tag("Create Rule") %>
+<div style="display:none">
+  Readings:
+  <%#= grouped_collection_select(:readings, :sensor_id, @sensors, :readings, :id, :id, :data) %><br/>
+  Testing Valid Value Ranges<%= select(:sensor, :value, @sensors[2].valid_value_range() ) %><br/>
+</div> <!-- "display:none" -->
+  <%= submit_tag("Choose Sensor and Reading") %>
 <% end %>

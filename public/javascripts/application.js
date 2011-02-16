@@ -1,4 +1,164 @@
 $(document).ready(function() {
+  $("select#sensor_sensor_id").change(function () {
+    var id_value_string = $(this).val();
+    id_value_string = convertStringToURI(id_value_string);
+    var id_from_name = 1;
+    //alert('id_value_string = ' + id_value_string);
+    if (id_value_string === "") {
+      // if the id is empty remove all the sub_selection options from being selectable and do not do any ajax
+      $("select#readings_readings_id option").remove();
+      var row = "<option value=\"" + "" + "\">" + "" + "</option>";
+      $(row).appendTo("select#readings_readings_id");
+    } else {
+      $.ajax({
+        dataType: "json",
+        cache: false,
+        url: '/sensors/get_values_from_name/' + id_value_string,
+        timeout: 2000,
+        beforeSend: function (xhr) {
+          xhr.setRequestHeader("Accept", "application/json");
+        },
+        error: function (XMLHttpRequest, errorTextStatus, error) {
+          alert("Failed to submit : " + errorTextStatus + " ;" + error);
+        },
+        success: function (data) {
+          //alert("valid_values data received " + data);
+          // Clear all options from sub category select
+          $("select#readings_readings_id option").remove();
+          //put in a empty default line
+          //var row = "<option value=\"" + "" + "\">" + "" + "</option>";
+          //$(row).appendTo("select#readings_readings_id");
+          // Fill sub category select
+          $.each(data, function(i, j){
+              row = "<option value=\"" + i + "\">" + data[i] + "</option>";
+              $(row).appendTo("select#readings_readings_id");
+          });
+        }
+      });
+    }
+  });
+
+  $("select#sensor_sensor_id").change(function () {
+    var id_value_string = $(this).val();
+    id_value_string = convertStringToURI(id_value_string);
+    var id_from_name = 1;
+    alert('id_value_string = ' + id_value_string);
+    if (id_value_string === "") {
+      // if the id is empty remove all the sub_selection options from being selectable and do not do any ajax
+      $("select#readings_readings_id option").remove();
+      var row = "<option value=\"" + "" + "\">" + "" + "</option>";
+      $(row).appendTo("select#readings_readings_id");
+    } else {
+      $.ajax({
+        dataType: "json",
+        cache: false,
+        url: '/sensors/get_values_from_name/' + id_value_string,
+        timeout: 2000,
+        beforeSend: function (xhr) {
+          xhr.setRequestHeader("Accept", "application/json");
+        },
+        error: function (XMLHttpRequest, errorTextStatus, error) {
+          alert("Failed to submit : " + errorTextStatus + " ;" + error);
+        },
+        success: function (data) {
+          //alert("valid_values data received " + data);
+          // Clear all options from sub category select
+          $("select#readings_readings_id option").remove();
+          //put in a empty default line
+          //var row = "<option value=\"" + "" + "\">" + "" + "</option>";
+          //$(row).appendTo("select#readings_readings_id");
+          // Fill sub category select
+          $.each(data, function(i, j){
+              row = "<option value=\"" + i + "\">" + data[i] + "</option>";
+              $(row).appendTo("select#readings_readings_id");
+          });
+        }
+      });
+    }
+  });
+
+  $("#rules-sensors .clickable").click(function () {
+    var id_value_string = $(this).html();
+    id_value_string = convertStringToURI(id_value_string);
+    var id_from_name = 1;
+    //alert('id_value_string = ' + id_value_string + '\n.');
+    if (id_value_string === "") {
+      //do nothing
+    } else {
+      $.ajax({
+        dataType: "json",
+        cache: false,
+        url: '/sensors/get_id_from_name/' + id_value_string,
+        timeout: 2000,
+        beforeSend: function (xhr) {
+          xhr.setRequestHeader("Accept", "application/json");
+        },
+        error: function (XMLHttpRequest, errorTextStatus, error) {
+          alert("Failed to submit : " + errorTextStatus + " ;" + error);
+        },
+        success: function (data) {
+          id_from_name = data;
+          //alert("get_id_from_name data received " + data);
+          //alert("id_from_name" + id_from_name);
+          $("#valid-sensor-values").html = data;
+          //id_from_name = $("#valid-sensor-values").html();
+          //alert("id_from_name" + id_from_name);
+
+          $.ajax({
+            dataType: "json",
+            cache: false,
+            url: '/sensors/' + id_from_name + '/valid_values',
+            timeout: 2000,
+            error: function (XMLHttpRequest, errorTextStatus, error) {
+              alert("Failed to submit : " + errorTextStatus + " ;" + error);
+            },
+            success: function (data) {
+              //alert("valid_values data received " + data.valid_values);
+              $("#valid-sensor-values").html(" (valid values: " + data.valid_values + ")");
+            }
+          });
+        }
+      });
+    }
+  });
+
+  $("#rules-actuators .clickable").click(function () {
+    var id_value_string = $(this).html();
+    id_value_string = convertStringToURI(id_value_string);
+    var id_from_name = 1;
+    alert('id_value_string = ' + id_value_string + '\n.');
+    if (id_value_string === "") {
+      //do nothing
+    } else {
+      $.ajax({
+        dataType: "json",
+        cache: false,
+        url: '/actuators/get_values_from_name/' + id_value_string,
+        timeout: 2000,
+        beforeSend: function (xhr) {
+          xhr.setRequestHeader("Accept", "application/json");
+        },
+        error: function (XMLHttpRequest, errorTextStatus, error) {
+          alert("Failed to submit : " + errorTextStatus + " ;" + error);
+        },
+        success: function (data) {
+          //alert("valid_values data received " + data.valid_values);
+          $("#valid-actuator-values").html(" (valid values: " + data.valid_values + ")");
+        }
+      });
+    }
+  });
+
+  function convertStringToURI(input) {
+    return encodeURI(input).replace("#", "%23");
+  }
+
+	$('#madlib_create').submit(function() {
+		//amlert('madlib_create');			
+		var sensor_id = $('#sensor_sensor_id').val();
+		var sensor_comparator = $('#sensor_operator_sensor_operator').val();
+	});
+
 	$('#madlib_create').submit(function() {
 		//alert('madlib_create');			
 		var sensor_id = $('#sensor_sensor_id').val();
@@ -24,7 +184,6 @@ $(document).ready(function() {
 		var actuator_id = $('#actuator_actuator_id').val();
 		var actuator_value = $('#actuator_value_actuator_value').val();		
 
-		var generatedRule = generateMagneticRule(rule);
 		var generatedRule = generateRule(sensor_id, sensor_comparator, sensor_value, actuator_id, actuator_value);
 		$('textarea#rule_rule').val(generatedRule);
 		//alert("new_rule submitted: \n" + generatedRule);
@@ -59,13 +218,13 @@ $(document).ready(function() {
     });
   }
 
-  $("select#actuator_value_actuator_value").click(function () { 
+  $("select#actuator_value_actuator_value").click(function () {
     //alert('clicked actuator_value_actuator_value');
     enableMadlibRuleCreation();
   });
 
 
-  $("span.clickable").click(function () { 
+  $("span.clickable").click(function () {
     var buttonText = $(this).html();
     var buttonDiv = $(this).parent("div").attr("id");
 
@@ -136,12 +295,10 @@ $(document).ready(function() {
     return false;
   });
   $("span.editable").hover(function () {
-
     $(this).addClass("hilite");
     }, function () {
     $(this).removeClass("hilite");
   });
-
 
 
   function enableRuleCreation(interfaceToEnable) {

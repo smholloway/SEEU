@@ -2,7 +2,7 @@ class ActuatorsController < ApplicationController
   # GET /actuators
   # GET /actuators.xml
   def index
-    @actuators = Actuator.all
+    @actuators = Actuator.paginate :per_page => 5, :page => params[:page], :order => 'created_at DESC' || 1
 
     respond_to do |format|
       format.html # index.html.erb
@@ -81,4 +81,17 @@ class ActuatorsController < ApplicationController
       format.xml  { head :ok }
     end
   end
+
+  def get_values_from_name
+    @actuator_id = Actuator.get_id_from_name(params[:name])
+    @actuator = Actuator.find(@actuator_id)
+    @vv = @actuator.valid_values # this returns the string representation of valid values
+    @vvr = @actuator.valid_value_range() # this returns the range of valid values
+
+    respond_to do |format|
+      format.html { @vv }
+      format.json { render :json => { :valid_values => @vv } }
+    end
+  end
+
 end

@@ -5,12 +5,15 @@
 <% @rules.each do |rule| %>
 <div class="rule-entry">
 	<div>
-		Rule <%= rule.id %><br/>
-		<%= rule.rule %>
+		<%= link_to "Rule #{rule.id}", rule %><br/>
 	</div>
 	<div>
-		Description<br/>
+		Rule description:
+        <% if rule.description.blank? %>
+          None
+        <% else %>
 		<%= rule.description %>
+        <% end %>
 	</div>
 	<div>
 		<%= link_to 'Show', rule %> | 

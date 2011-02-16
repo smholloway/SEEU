@@ -20,7 +20,7 @@ then set <%= collection_select(:actuator, :actuator_id, Actuator.all, :name, :na
   </div>
 
 	<div class="field">
-    <%= f.label :description %><br />
+    <%= f.label :description %>: (Optional) Describe what your rule is supposed to do<br/>
     <%= f.text_area :description, :rows => 3 %>
   </div>
 

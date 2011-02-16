@@ -41,11 +41,11 @@
     </div> <!-- rules-actuators -->
 
     <div id="rules-sensor-values">
-      <span class="editable" style="display:none">Input #</span>
+      <span class="editable" style="display:none">Input #</span><span id="valid-sensor-values"></span>
     </div> <!-- rules-values -->
 
     <div id="rules-actuator-values">
-      <span class="editable" style="display:none">Input #</span>
+      <span class="editable" style="display:none">Input #</span><span id="valid-actuator-values"></span>
     </div> <!-- rules-actuator-values -->
   </div> <!-- click-rules -->
 
@@ -60,7 +60,7 @@
 	  </div>
 
 		<div class="field">
-	    <%= f.label :description %><br />
+	    <%= f.label :description %>: (Optional) Describe what your rule is supposed to do<br/>
 	    <%= f.text_area :description, :rows => 3 %>
 	  </div>
 

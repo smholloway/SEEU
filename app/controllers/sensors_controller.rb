@@ -42,6 +42,10 @@ class SensorsController < ApplicationController
   # POST /sensors.xml
   def create
     @sensor = Sensor.new(params[:sensor])
+    if @sensor.save
+      @sensor.data_uri = sensor_readings_path(@sensor)
+      @sensor.configuration_uri = sensor_path(@sensor)
+    end
 
     respond_to do |format|
       if @sensor.save
@@ -81,4 +85,39 @@ class SensorsController < ApplicationController
       format.xml  { head :ok }
     end
   end
+
+
+  def valid_values
+    @sensor = Sensor.find(params[:id])
+    @vv = @sensor.valid_values # this returns the string representation of valid values
+    @vvr = @sensor.valid_value_range() # this returns the range of valid values
+
+    respond_to do |format|
+      format.html { @vv }
+      format.json { render :json => { :valid_values => @vv } }
+      #format.json { render :json => @vvr }
+    end
+  end
+
+  def get_id_from_name
+    @sensor_id = Sensor.get_id_from_name(params[:name])
+
+    respond_to do |format|
+      format.html { @sensor_id }
+      format.json { render :json => @sensor_id }
+    end
+  end
+
+  def get_values_from_name
+    @sensor_id = Sensor.get_id_from_name(params[:name])
+    @sensor = Sensor.find(@sensor_id)
+    @vv = @sensor.valid_values
+    @vvr = @sensor.valid_value_range()
+
+    respond_to do |format|
+      format.html { @vv }
+      format.json { render :json => @vvr }
+    end
+  end
+
 end

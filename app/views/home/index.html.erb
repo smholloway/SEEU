@@ -5,35 +5,9 @@
 <!-- ####### -->
 <div id="left-box">
 	<span class="box-heading"><%= link_to 'Sensors', sensors_path %></span>
-	<% for sensor in @sensors[0..4] %>
-	<div class="<%= cycle('device-entry-odd', 'device-entry-even') %>">
-		<div class="device-name">
-			<%= link_to sensor.name, sensor_path(sensor) %>
-		</div> <!-- device-name -->
 
-		<div class="device-image">
-			<img src="images/<%=h sensor.model %>.jpg"/>
-		</div> <!-- device-image -->
+    <%= render :partial => "sensors/sensor", :collection => @sensors[0..4] %>
 
-		<div class="device-description">
-			<%= truncate(strip_tags(sensor.description), :length => 140) %>
-
-			<div class="device-readings">
-				<div class="device-readings-header">Recent Readings:</div>
-				<ul class="sensor-readings">
-					<%= render :partial => "readings/reading", :collection => sensor.readings.reverse[0..2] %>
-				</ul> <!-- sensor-readings -->
-			</div> <!-- device-readings -->
-		</div> <!-- device-description -->
-
-		<div style="clear:both"></div>	
-
-		<div style="display:none">
-			Config URI: <%= link_to sensor.configuration_uri, sensor.configuration_uri %></a>
-		</div>
-	</div> <!-- device-entry -->
-	<% end %>
-	
 	<% if @sensors.length > 5 %>
 	<div class="more">
 		<%= link_to "... the other sensors (#{@sensors.length-5})", sensors_path %>
@@ -47,34 +21,9 @@
 <!-- ######### -->
 <div id="right-box">
 	<span class="box-heading"><%= link_to 'Actuators', actuators_path %></span>
-	<% for actuator in @actuators[0..4] %>
-	<div class="<%= cycle('device-entry-odd', 'device-entry-even') %>">
-		<div class="device-name">
-			<%= link_to actuator.name, actuator_path(actuator) %>
-		</div> <!-- device-name -->
-		
-		<div class="device-image">
-			<img src="images/<%=h actuator.model %>.jpg"/>
-		</div> <!-- device-image -->
-		
-		<div class="device-description">
-			<%= truncate(strip_tags(actuator.description), :length => 140) %><br/>
-			
-			<% if !actuator.command.data.nil? %>
-			<div class="device-readings">
-				Command: <%=h actuator.command.data %>
-			</div> <!-- device-readings -->
-			<% end %>
-		</div> <!-- device-description -->
 
-		<div style="clear:both"></div>
-		
-		<div style="display:none">	
-			Config URI: <a href="<%=h actuator.configuration_uri %>"><%=h actuator.configuration_uri %></a>
-		</div>
-	</div> <!-- device-entry -->
-	<% end %>
-	
+    <%= render :partial => "actuators/actuator", :collection => @actuators[0..4] %>
+
 	<% if @actuators.length > 5 %>
 	<div class="more">
 		<%= link_to "... the other actuators (#{@actuators.length-5})", actuators_path %>
@@ -92,25 +41,12 @@
 <!-- ##### -->
 <div id="rules">
 	<span class="box-heading"><%= link_to 'Rules', rules_path %></span>
-	<% @rules[0..4].each do |rule| %>
-	<div class="<%= cycle('rules-entry-odd', 'rules-entry-even') %>">
-		<div class="rule-name">
-		  <%= link_to "Rule #{rule.id}", rule %><br />
-        </div> <!-- device-name -->
-		<div class="rule-description">
-		  Description: 
-          <% if rule.description.blank? %>
-            None
-          <% else %>
-			<%= truncate(strip_tags(rule.description), :length => 140) %>
-          <% end %>
-        </div> <!-- rule-description -->
-	</div> <!-- entry -->
-	<% end %>
-	
+
+    <%= render :partial => "rules/rule", :collection => @rules[0..4] %>
+
 	<% if @rules.length > 5 %>
 	<div class="more">
-		<%= link_to "... the other rules (#{@rules.length-5})", actuators_path %>
+		<%= link_to "... the other rules (#{@rules.length-5})", rules_path %>
 	</div>
 	<% end %>
 </div> <!-- rules -->
