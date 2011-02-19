@@ -275,7 +275,10 @@ div#madlibs, div#magnetic {
 	background: #FFFFFF;
 }
 #magnetic-create, #madlib-create {
-  display: none;
+  display: all;
+}
+textarea {
+  width: 430px;
 }
 
 .more {

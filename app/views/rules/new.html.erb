@@ -1,6 +1,6 @@
 <% title "New Rule" %>
-<% test = "magnetic" %>
 <% test = "madlibs" %>
+<% test = "magnetic" %>
 
 <h1>New rule</h1>
 
@@ -14,7 +14,7 @@
   </div> <!-- madlibs -->
 <% elsif test == "magnetic" %>
   <div id="magnetic">
-    <%= render 'magnetic_advanced' %>
+    <%= render 'magnetic' %>
   </div> <!-- magnetic -->
 <% else %>
   <%#= render 'form' %>

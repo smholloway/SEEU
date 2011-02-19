@@ -15,7 +15,7 @@
 
 <div id="action_1">
   <span class="code">set</span> 
-  <%= collection_select(:actuator, :name, Actuator.all, :id, :name, { :prompt => true }, { :class=>'sensor_name' } ) %>
+  <%= collection_select(:actuator, :name, Actuator.all, :id, :name, { :prompt => true }, { :class=>'actuator_name' } ) %>
   <span class="code">to</span>
   <%= select(:actuator, :value, values_array, { }, { :class=>'actuator_value' } ) %>
   <%= select(:actuator, :conditional, actuator_conditionals_array, { }, { :class=>'actuator_conditional' } ) %>
@@ -34,5 +34,5 @@
     <%= f.text_area :description, :rows => 3 %>
   </div>
 
-  <%= f.submit :name => "Create Madlibs Rule", :valu => "Create Madlibs Rule", :id => "madlib-create" %>
+  <%= f.submit :name => "Create Madlibs Rule", :value => "Create Madlibs Rule", :id => "madlib-create", :disabled => true %>
 <% end %>

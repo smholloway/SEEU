@@ -1,17 +1,22 @@
 $(document).ready(function() {
-  //-----------------------
-  // BEGIN MADLIBS METHODS
-  //-----------------------
-  $("select#sensor_name").live('change', function () {
+  //-----------------------//
+  // BEGIN MADLIBS METHODS //
+  //-----------------------//
+  $("select.sensor_name").live('change', function () {
     var id_value_string = $(this).val();
-    //alert('id_value_string = ' + id_value_string);
+    var parent_div = $(this).parent();
+    var sensor_operator_div = $(this).siblings("select.sensor_operator");
+    var sensor_value_div = $(this).siblings("select.sensor_value");
+
+    // clear the sibling dropdowns (value and operator)
+    sensor_operator_div.empty();
+    sensor_value_div.empty();
+
     if (id_value_string === "") {
-      // if the id is empty remove all the sub_selection options from being selectable and do not do any ajax
-      $("select#sensor_value option").remove();
-      $("select#sensor_operator option").remove();
+      // if the sensor selection is empty clear sibling dropdowns
       var row = "<option value=\"" + "" + "\">" + "" + "</option>";
-      $(row).appendTo("select#sensor_value");
-      $(row).appendTo("select#sensor_operator");
+      $(row).appendTo(sensor_operator_div);
+      $(row).appendTo(sensor_value_div);
     } else {
       $.ajax({
         dataType: "json",
@@ -25,40 +30,42 @@ $(document).ready(function() {
           alert("Failed to submit : " + errorTextStatus + " ;" + error);
         },
         success: function (data) {
-          //alert(typeof(data[0])=='string' && isNaN(data[0]));
-          // update the conditional dropdown for non-ordinal values
+          // update the conditional dropdown
           if (typeof(data[0])=='string' && isNaN(data[0])) {
-            $("select#sensor_operator option").remove();
-            $('<option>=</option>').appendTo("select#sensor_operator");
+            // update the conditional dropdown for non-ordinal values (e.g., on,off)
+            $('<option>=</option>').appendTo(sensor_operator_div);
           } else {
-            $("select#sensor_operator option").remove();
-            $('<option>></option>').appendTo("select#sensor_operator");
-            $('<option>>=</option>').appendTo("select#sensor_operator");
-            $('<option>=</option>').appendTo("select#sensor_operator");
-            $('<option><=</option>').appendTo("select#sensor_operator");
-            $('<option><</option>').appendTo("select#sensor_operator");
+            // update the dropdown for ordinal values (e.g., 0..100)
+            $('<option>></option>').appendTo(sensor_operator_div);
+            $('<option>>=</option>').appendTo(sensor_operator_div);
+            $('<option>=</option>').appendTo(sensor_operator_div);
+            $('<option><=</option>').appendTo(sensor_operator_div);
+            $('<option><</option>').appendTo(sensor_operator_div);
           }
-          //alert("valid_values data received " + data);
-          // Clear all options from sub category select
-          $("select#sensor_value option").remove();
-          // Fill sub category select
-          $.each(data, function(i, j){
+
+          // fill the value dropdown
+          $.each(data, function(i){
               row = "<option value=\"" + i + "\">" + data[i] + "</option>";
-              $(row).appendTo("select#sensor_value");
+              $(row).appendTo(sensor_value_div);
           });
         }
       });
     }
   });
 
-  $("select#actuator_name").change(function () {
+  $("select.actuator_name").live('change', function () {
     var id_value_string = $(this).val();
-    //alert('id_value_string = ' + id_value_string);
+    var parent_div = $(this).parent();
+    var actuator_operator_div = $(this).siblings("select.actuator_operator");
+    var actuator_value_div = $(this).siblings("select.actuator_value");
+
+    // Clear all options from sub category select
+    actuator_value_div.empty();
+
     if (id_value_string === "") {
-      // if the id is empty remove all the sub_selection options from being selectable and do not do any ajax
-      $("select#actuator_value option").remove();
+      // if the actuator selection is invalid empty the sibling dropdowns
       var row = "<option value=\"" + "" + "\">" + "" + "</option>";
-      $(row).appendTo("select#actuator_value");
+      $(row).appendTo(actuator_value_div);
     } else {
       $.ajax({
         dataType: "json",
@@ -72,20 +79,20 @@ $(document).ready(function() {
           alert("Failed to submit : " + errorTextStatus + " ;" + error);
         },
         success: function (data) {
-          //alert("valid_values data received " + data);
-          // Clear all options from sub category select
-          $("select#actuator_value option").remove();
           // Fill sub category select
-          $.each(data, function(i, j){
+          $.each(data, function(i){
               row = "<option value=\"" + i + "\">" + data[i] + "</option>";
-              $(row).appendTo("select#actuator_value");
+              $(row).appendTo(actuator_value_div);
           });
         }
       });
     }
+
+    // enable the create button to be pressed
+    enableMadlibRuleCreation();
   });
 
-  $("select#sensor_conditional").live('change', function () {
+  $("select.sensor_conditional").live('change', function () {
     var value_string  = $(this).val();
     var parent_div    = $(this).parent();
     var parent_div_id = $(this).parent().attr("id");
@@ -100,7 +107,7 @@ $(document).ready(function() {
     }
   });
 
-  $("select#actuator_conditional").live('change', function () {
+  $("select.actuator_conditional").live('change', function () {
     var value_string  = $(this).val();
     var parent_div    = $(this).parent();
     var parent_div_id = $(this).parent().attr("id");
@@ -114,12 +121,6 @@ $(document).ready(function() {
       new_div.attr("id", new_div_id);
     }
   });
-
-	$('#madlib_create').submit(function() {
-		//amlert('madlib_create');			
-		var sensor_id = $('#sensor_sensor_id').val();
-		var sensor_comparator = $('#sensor_operator_sensor_operator').val();
-	});
 
 	$('#madlib_create').submit(function() {
 		//alert('madlib_create');			
@@ -131,56 +132,32 @@ $(document).ready(function() {
 	
 		var generatedRule = generateRule(sensor_id, sensor_comparator, sensor_value, actuator_id, actuator_value);
 		$('textarea#rule_rule').val(generatedRule);
-		//alert("new_rule submitted: \n" + generatedRule);
+		alert("new_rule submitted: \n" + generatedRule);
 
-		return true;
+		return false;
 	});
-	
-  $("select#actuator_value_actuator_value").click(function () {
-    //alert('clicked actuator_value_actuator_value');
-    enableMadlibRuleCreation();
-  });
 
-  function enableRuleCreation(interfaceToEnable) {
-    if (interfaceToEnable == "madlib") {
-      enableMadlibRuleCreation();
-    } else {
-      enableMagneticRuleCreation();
-    }
-  }
-
-  function enableMadlibRuleCreation() {
-    $('#madlib-create').css('display', 'all');
-    $('#madlib-create').toggle();
-  }
-
-  function incrementDivId(input) {
-    var tokens = input.split("_");
-    var num = parseInt(tokens[1]);
-    num+=1;
-    var output = tokens[0] + "_" + num;
-    return output;
-  }
-  //-----------------------
-  // END OF MADLIBS METHODS
-  //-----------------------
+  //------------------------//
+  // END OF MADLIBS METHODS //
+  //------------------------//
 
 
-  $("select#sensor_sensor_id").change(function () {
-    var id_value_string = $(this).val();
+
+  //-------------------------------//
+  // BEGIN MAGNETIC POETRY METHODS //
+  //-------------------------------//
+  $("#rules-sensors .clickable").click(function () {
+    var id_value_string = $(this).html();
     id_value_string = convertStringToURI(id_value_string);
     var id_from_name = 1;
-    //alert('id_value_string = ' + id_value_string);
+    //alert('id_value_string = ' + id_value_string + '\n.');
     if (id_value_string === "") {
-      // if the id is empty remove all the sub_selection options from being selectable and do not do any ajax
-      $("select#readings_readings_id option").remove();
-      var row = "<option value=\"" + "" + "\">" + "" + "</option>";
-      $(row).appendTo("select#readings_readings_id");
+      //do nothing
     } else {
       $.ajax({
         dataType: "json",
         cache: false,
-        url: '/sensors/get_values_from_name/' + id_value_string,
+        url: '/sensors/get_values_string_from_name/' + id_value_string,
         timeout: 2000,
         beforeSend: function (xhr) {
           xhr.setRequestHeader("Accept", "application/json");
@@ -189,23 +166,13 @@ $(document).ready(function() {
           alert("Failed to submit : " + errorTextStatus + " ;" + error);
         },
         success: function (data) {
-          //alert("valid_values data received " + data);
-          // Clear all options from sub category select
-          $("select#readings_readings_id option").remove();
-          //put in a empty default line
-          //var row = "<option value=\"" + "" + "\">" + "" + "</option>";
-          //$(row).appendTo("select#readings_readings_id");
-          // Fill sub category select
-          $.each(data, function(i, j){
-              row = "<option value=\"" + i + "\">" + data[i] + "</option>";
-              $(row).appendTo("select#readings_readings_id");
-          });
+          $("#valid-sensor-values").html(" (valid values: " + data.valid_values + ")");
         }
       });
     }
   });
 
-  $("#rules-sensors .clickable").click(function () {
+  $("#OLDrules-sensors .clickable").click(function () {
     var id_value_string = $(this).html();
     id_value_string = convertStringToURI(id_value_string);
     var id_from_name = 1;
@@ -250,6 +217,7 @@ $(document).ready(function() {
     }
   });
 
+
   $("#rules-actuators .clickable").click(function () {
     var id_value_string = $(this).html();
     id_value_string = convertStringToURI(id_value_string);
@@ -277,10 +245,6 @@ $(document).ready(function() {
     }
   });
 
-  function convertStringToURI(input) {
-    return encodeURI(input).replace("#", "%23");
-  }
-
 	$('#magnetic_create').submit(function() {
 		//alert('magnetic_create');			
 		var rule = $("div#click-rules-written").text();
@@ -298,33 +262,6 @@ $(document).ready(function() {
 		return true;
 	});
 	
-	function generateRule(sensor_id, sensor_comparator, sensor_value, actuator_id, actuator_value) {
-		var rule = "if (Sensor.where(\"name = \'" + sensor_id + "\'\").first.readings.last.data " + 
-								sensor_comparator +
-								" " + sensor_value + ".to_s);\n" +
-		  					"a = Actuator.where(\"name = \'" + actuator_id + "\'\").first;\n" + 
-		  					"a.command.data = " + actuator_value + ";\n" +
-		  					"a.save;\n" +
-								"end;";
-		return rule;
-	}
-	
-	function generateMagneticRule(r) {
-		var rule = r;
-		return rule;
-	}
-	
-  function disableButtonsInDiv(inputDiv) {
-    $('div#' + inputDiv + ' span').each(function () {
-    $(this).css('display', 'none');
-    });
-  }
-  function enableButtonsInDiv(inputDiv) {
-    $('div#' + inputDiv + ' span').each(function () {
-      $(this).css('display', 'inline');
-    });
-  }
-
   $("span.clickable").click(function () {
     var buttonText = $(this).html();
     var buttonDiv = $(this).parent("div").attr("id");
@@ -395,17 +332,12 @@ $(document).ready(function() {
     });
     return false;
   });
+
   $("span.editable").hover(function () {
     $(this).addClass("hilite");
     }, function () {
     $(this).removeClass("hilite");
   });
-
-
-  function enableMagneticRuleCreation() {
-    $('#magnetic-create').css('display', 'all');
-    $('#magnetic-create').toggle();
-  }
 
   function enableButtons(clickedText, clickedDiv) {
     disableButtonsInDiv("click-rules");
@@ -450,4 +382,71 @@ $(document).ready(function() {
       alert(inputText);
     }
   }
+  //-----------------------------//
+  // END MAGNETIC POETRY METHODS //
+  //-----------------------------//
+
+
+
+  //-----------------------//
+  // BEGIN UTILITY METHODS //
+  //-----------------------//
+  function enableRuleCreation(interfaceToEnable) {
+    if (interfaceToEnable == "madlib") {
+      enableMadlibRuleCreation();
+    } else {
+      enableMagneticRuleCreation();
+    }
+  }
+
+  function convertStringToURI(input) {
+    return encodeURI(input).replace("#", "%23");
+  }
+
+  function enableMadlibRuleCreation() {
+    $("#madlib-create").attr('disabled','');
+  }
+
+  function enableMagneticRuleCreation() {
+    $('#magnetic-create').attr('disabled', '');
+  }
+
+  function incrementDivId(input) {
+    var tokens = input.split("_");
+    var num = parseInt(tokens[1]);
+    num+=1;
+    var output = tokens[0] + "_" + num;
+    return output;
+  }
+
+	function generateRule(sensor_id, sensor_comparator, sensor_value, actuator_id, actuator_value) {
+		var rule = "if (Sensor.where(\"name = \'" + sensor_id + "\'\").first.readings.last.data " + 
+								sensor_comparator +
+								" " + sensor_value + ".to_s);\n" +
+		  					"a = Actuator.where(\"name = \'" + actuator_id + "\'\").first;\n" + 
+		  					"a.command.data = " + actuator_value + ";\n" +
+		  					"a.save;\n" +
+								"end;";
+		return rule;
+	}
+	
+	function generateMagneticRule(r) {
+		var rule = r;
+		return rule;
+	}
+	
+  function disableButtonsInDiv(inputDiv) {
+    $('div#' + inputDiv + ' span').each(function () {
+    $(this).css('display', 'none');
+    });
+  }
+  function enableButtonsInDiv(inputDiv) {
+    $('div#' + inputDiv + ' span').each(function () {
+      $(this).css('display', 'inline');
+    });
+  }
+
+  //---------------------//
+  // END UTILITY METHODS //
+  //---------------------//
 });

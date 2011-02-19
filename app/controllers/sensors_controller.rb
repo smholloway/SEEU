@@ -128,4 +128,16 @@ class SensorsController < ApplicationController
     end
   end
 
+  def get_values_string_from_name
+    @sensor_id = Sensor.get_id_from_name(params[:name])
+    @sensor = Sensor.find(@sensor_id)
+    @vv = @sensor.valid_values
+    @vvr = @sensor.valid_value_range()
+
+    respond_to do |format|
+      format.html { @vv }
+      format.json { render :json => { :valid_values => @vv } }
+    end
+  end
+
 end

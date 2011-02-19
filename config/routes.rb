@@ -28,6 +28,7 @@ Seeu::Application.routes.draw do
   match '/sensors/:id/valid_values_string' => 'sensors#valid_values_string'
   match '/sensors/get_id_from_name/:name' => 'sensors#get_id_from_name'
   match '/sensors/get_values_from_name/:name' => 'sensors#get_values_from_name'
+  match '/sensors/get_values_string_from_name/:name' => 'sensors#get_values_string_from_name'
 
   match '/actuators/:id/valid_values' => 'actuators#valid_values'
   match '/actuators/:id/valid_values_string' => 'actuators#valid_values_string'
