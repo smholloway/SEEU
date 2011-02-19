@@ -3,8 +3,8 @@ class RulesController < ApplicationController
   # GET /rules.xml
   def index
     @rules     = Rule.all
-	@sensors   = Sensor.all
-	@actuators = Actuator.all
+	  @sensors   = Sensor.all
+	  @actuators = Actuator.all
 
     respond_to do |format|
       format.html # index.html.erb

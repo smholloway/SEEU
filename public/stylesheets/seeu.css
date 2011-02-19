@@ -282,3 +282,7 @@ div#madlibs, div#magnetic {
 	margin-right: 5px;
 	text-align: right;
 }
+.code {
+  font-family: courier, monospace;
+  font-weight: bold;
+  text-transform: uppercase;

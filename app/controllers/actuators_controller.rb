@@ -94,4 +94,26 @@ class ActuatorsController < ApplicationController
     end
   end
 
+  def valid_values
+    @actuator = Actuator.find(params[:id])
+    @vv = @actuator.valid_values # this returns the string representation of valid values
+    @vvr = @actuator.valid_value_range() # this returns the range of valid values
+
+    respond_to do |format|
+      format.html { @vv }
+      format.json { render :json => @vvr }
+    end
+  end
+
+  def valid_values_string
+    @actuator = Actuator.find(params[:id])
+    @vv = @actuator.valid_values # this returns the string representation of valid values
+    @vvr = @actuator.valid_value_range() # this returns the range of valid values
+
+    respond_to do |format|
+      format.html { @vv }
+      format.json { render :json => { :valid_values => @vv } }
+    end
+  end
+
 end

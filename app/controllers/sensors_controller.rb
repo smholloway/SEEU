@@ -89,13 +89,21 @@ class SensorsController < ApplicationController
 
   def valid_values
     @sensor = Sensor.find(params[:id])
-    @vv = @sensor.valid_values # this returns the string representation of valid values
     @vvr = @sensor.valid_value_range() # this returns the range of valid values
 
     respond_to do |format|
       format.html { @vv }
+      format.json { render :json => @vvr }
+    end
+  end
+
+  def valid_values_string
+    @sensor = Sensor.find(params[:id])
+    @vv = @sensor.valid_values # this returns the string representation of valid values
+
+    respond_to do |format|
+      format.html { @vv }
       format.json { render :json => { :valid_values => @vv } }
-      #format.json { render :json => @vvr }
     end
   end
 

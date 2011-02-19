@@ -1,19 +1,69 @@
 $(document).ready(function() {
-  $("select#sensor_sensor_id").change(function () {
+  //-----------------------
+  // BEGIN MADLIBS METHODS
+  //-----------------------
+  $("select#sensor_name").change(function () {
     var id_value_string = $(this).val();
-    id_value_string = convertStringToURI(id_value_string);
-    var id_from_name = 1;
     //alert('id_value_string = ' + id_value_string);
     if (id_value_string === "") {
       // if the id is empty remove all the sub_selection options from being selectable and do not do any ajax
-      $("select#readings_readings_id option").remove();
+      $("select#sensor_value option").remove();
+      $("select#sensor_operator option").remove();
       var row = "<option value=\"" + "" + "\">" + "" + "</option>";
-      $(row).appendTo("select#readings_readings_id");
+      $(row).appendTo("select#sensor_value");
+      $(row).appendTo("select#sensor_operator");
     } else {
       $.ajax({
         dataType: "json",
         cache: false,
-        url: '/sensors/get_values_from_name/' + id_value_string,
+        url: '/sensors/' + id_value_string + "/valid_values",
+        timeout: 2000,
+        beforeSend: function (xhr) {
+          xhr.setRequestHeader("Accept", "application/json");
+        },
+        error: function (XMLHttpRequest, errorTextStatus, error) {
+          alert("Failed to submit : " + errorTextStatus + " ;" + error);
+        },
+        success: function (data) {
+          //alert(typeof(data[0])=='string' && isNaN(data[0]));
+          // update the conditional dropdown for non-ordinal values
+          if (typeof(data[0])=='string' && isNaN(data[0])) {
+            $("select#sensor_operator option").remove();
+            $('<option>=</option>').appendTo("select#sensor_operator");
+          } else {
+            $("select#sensor_operator option").remove();
+            $('<option>></option>').appendTo("select#sensor_operator");
+            $('<option>>=</option>').appendTo("select#sensor_operator");
+            $('<option>=</option>').appendTo("select#sensor_operator");
+            $('<option><=</option>').appendTo("select#sensor_operator");
+            $('<option><</option>').appendTo("select#sensor_operator");
+          }
+          //alert("valid_values data received " + data);
+          // Clear all options from sub category select
+          $("select#sensor_value option").remove();
+          // Fill sub category select
+          $.each(data, function(i, j){
+              row = "<option value=\"" + i + "\">" + data[i] + "</option>";
+              $(row).appendTo("select#sensor_value");
+          });
+        }
+      });
+    }
+  });
+
+  $("select#actuator_name").change(function () {
+    var id_value_string = $(this).val();
+    //alert('id_value_string = ' + id_value_string);
+    if (id_value_string === "") {
+      // if the id is empty remove all the sub_selection options from being selectable and do not do any ajax
+      $("select#actuator_value option").remove();
+      var row = "<option value=\"" + "" + "\">" + "" + "</option>";
+      $(row).appendTo("select#actuator_value");
+    } else {
+      $.ajax({
+        dataType: "json",
+        cache: false,
+        url: '/actuators/' + id_value_string + "/valid_values",
         timeout: 2000,
         beforeSend: function (xhr) {
           xhr.setRequestHeader("Accept", "application/json");
@@ -24,25 +74,36 @@ $(document).ready(function() {
         success: function (data) {
           //alert("valid_values data received " + data);
           // Clear all options from sub category select
-          $("select#readings_readings_id option").remove();
-          //put in a empty default line
-          //var row = "<option value=\"" + "" + "\">" + "" + "</option>";
-          //$(row).appendTo("select#readings_readings_id");
+          $("select#actuator_value option").remove();
           // Fill sub category select
           $.each(data, function(i, j){
               row = "<option value=\"" + i + "\">" + data[i] + "</option>";
-              $(row).appendTo("select#readings_readings_id");
+              $(row).appendTo("select#actuator_value");
           });
         }
       });
     }
   });
 
+  $("select#sensor_conditional").change(function () {
+    var id_value_string = $(this).val();
+    alert('id_value_string = ' + id_value_string);
+    if (id_value_string === "") {
+      // this should not happen
+    } else {
+    }
+  });
+
+  //-----------------------
+  // END OF MADLIBS METHODS
+  //-----------------------
+
+
   $("select#sensor_sensor_id").change(function () {
     var id_value_string = $(this).val();
     id_value_string = convertStringToURI(id_value_string);
     var id_from_name = 1;
-    alert('id_value_string = ' + id_value_string);
+    //alert('id_value_string = ' + id_value_string);
     if (id_value_string === "") {
       // if the id is empty remove all the sub_selection options from being selectable and do not do any ajax
       $("select#readings_readings_id option").remove();
