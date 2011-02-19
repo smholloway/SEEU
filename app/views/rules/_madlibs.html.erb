@@ -5,20 +5,20 @@
 <% sensor_conditionals_array = ["then", "and"] %>
 <% actuator_conditionals_array = ["", "and"] %>
 
-<div id="condition1">
+<div id="condition_1">
   <span class="code">if</span> 
-  <%= collection_select(:sensor, :name, Sensor.all, :id, :name, :prompt => true ) %>
-  <%= select(:sensor, :operator, operators_array) %>
-  <%= select(:sensor, :value, values_array) %>
-  <%= select(:sensor, :conditional, sensor_conditionals_array) %>
+  <%= collection_select(:sensor, :name, Sensor.all, :id, :name, { :prompt => true }, { :class=>'sensor_name' } ) %>
+  <%= select(:sensor, :operator, operators_array, { }, { :class=>'sensor_operator' } ) %>
+  <%= select(:sensor, :value, values_array, { }, { :class=>'sensor_value' } ) %>
+  <%= select(:sensor, :conditional, sensor_conditionals_array, { }, { :class=>'sensor_conditional' } ) %>
 </div> <!-- condition1 -->
 
-<div id="action1">
+<div id="action_1">
   <span class="code">set</span> 
-  <%= collection_select(:actuator, :name, Actuator.all, :id, :name, :prompt => true) %>
+  <%= collection_select(:actuator, :name, Actuator.all, :id, :name, { :prompt => true }, { :class=>'sensor_name' } ) %>
   <span class="code">to</span>
-  <%= select(:actuator, :value, values_array) %>
-  <%#= select(:actuator, :conditional, actuator_conditionals_array) %>
+  <%= select(:actuator, :value, values_array, { }, { :class=>'actuator_value' } ) %>
+  <%= select(:actuator, :conditional, actuator_conditionals_array, { }, { :class=>'actuator_conditional' } ) %>
 </div> <!-- action1 -->
 
 <br/>

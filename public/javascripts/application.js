@@ -2,7 +2,7 @@ $(document).ready(function() {
   //-----------------------
   // BEGIN MADLIBS METHODS
   //-----------------------
-  $("select#sensor_name").change(function () {
+  $("select#sensor_name").live('change', function () {
     var id_value_string = $(this).val();
     //alert('id_value_string = ' + id_value_string);
     if (id_value_string === "") {
@@ -85,15 +85,82 @@ $(document).ready(function() {
     }
   });
 
-  $("select#sensor_conditional").change(function () {
-    var id_value_string = $(this).val();
-    alert('id_value_string = ' + id_value_string);
-    if (id_value_string === "") {
-      // this should not happen
+  $("select#sensor_conditional").live('change', function () {
+    var value_string  = $(this).val();
+    var parent_div    = $(this).parent();
+    var parent_div_id = $(this).parent().attr("id");
+    var new_div_id    = incrementDivId(parent_div_id);
+
+    if (value_string === "" || value_string === "then") {
+      // disable any subsequent conditional divs
     } else {
+      // enable another IF block
+      var new_div = parent_div.clone().insertAfter(parent_div);
+      new_div.attr("id", new_div_id);
     }
   });
 
+  $("select#actuator_conditional").live('change', function () {
+    var value_string  = $(this).val();
+    var parent_div    = $(this).parent();
+    var parent_div_id = $(this).parent().attr("id");
+    var new_div_id    = incrementDivId(parent_div_id);
+
+    if (value_string === "" || value_string === "then") {
+      // disable any subsequent conditional divs
+    } else {
+      // enable another IF block
+      var new_div = parent_div.clone().insertAfter(parent_div);
+      new_div.attr("id", new_div_id);
+    }
+  });
+
+	$('#madlib_create').submit(function() {
+		//amlert('madlib_create');			
+		var sensor_id = $('#sensor_sensor_id').val();
+		var sensor_comparator = $('#sensor_operator_sensor_operator').val();
+	});
+
+	$('#madlib_create').submit(function() {
+		//alert('madlib_create');			
+		var sensor_id = $('#sensor_sensor_id').val();
+		var sensor_comparator = $('#sensor_operator_sensor_operator').val();
+		var sensor_value = $('#sensor_value_sensor_value').val();
+		var actuator_id = $('#actuator_actuator_id').val();
+		var actuator_value = $('#actuator_value_actuator_value').val();		
+	
+		var generatedRule = generateRule(sensor_id, sensor_comparator, sensor_value, actuator_id, actuator_value);
+		$('textarea#rule_rule').val(generatedRule);
+		//alert("new_rule submitted: \n" + generatedRule);
+
+		return true;
+	});
+	
+  $("select#actuator_value_actuator_value").click(function () {
+    //alert('clicked actuator_value_actuator_value');
+    enableMadlibRuleCreation();
+  });
+
+  function enableRuleCreation(interfaceToEnable) {
+    if (interfaceToEnable == "madlib") {
+      enableMadlibRuleCreation();
+    } else {
+      enableMagneticRuleCreation();
+    }
+  }
+
+  function enableMadlibRuleCreation() {
+    $('#madlib-create').css('display', 'all');
+    $('#madlib-create').toggle();
+  }
+
+  function incrementDivId(input) {
+    var tokens = input.split("_");
+    var num = parseInt(tokens[1]);
+    num+=1;
+    var output = tokens[0] + "_" + num;
+    return output;
+  }
   //-----------------------
   // END OF MADLIBS METHODS
   //-----------------------
@@ -214,27 +281,6 @@ $(document).ready(function() {
     return encodeURI(input).replace("#", "%23");
   }
 
-	$('#madlib_create').submit(function() {
-		//amlert('madlib_create');			
-		var sensor_id = $('#sensor_sensor_id').val();
-		var sensor_comparator = $('#sensor_operator_sensor_operator').val();
-	});
-
-	$('#madlib_create').submit(function() {
-		//alert('madlib_create');			
-		var sensor_id = $('#sensor_sensor_id').val();
-		var sensor_comparator = $('#sensor_operator_sensor_operator').val();
-		var sensor_value = $('#sensor_value_sensor_value').val();
-		var actuator_id = $('#actuator_actuator_id').val();
-		var actuator_value = $('#actuator_value_actuator_value').val();		
-	
-		var generatedRule = generateRule(sensor_id, sensor_comparator, sensor_value, actuator_id, actuator_value);
-		$('textarea#rule_rule').val(generatedRule);
-		//alert("new_rule submitted: \n" + generatedRule);
-
-		return true;
-	});
-	
 	$('#magnetic_create').submit(function() {
 		//alert('magnetic_create');			
 		var rule = $("div#click-rules-written").text();
@@ -278,12 +324,6 @@ $(document).ready(function() {
       $(this).css('display', 'inline');
     });
   }
-
-  $("select#actuator_value_actuator_value").click(function () {
-    //alert('clicked actuator_value_actuator_value');
-    enableMadlibRuleCreation();
-  });
-
 
   $("span.clickable").click(function () {
     var buttonText = $(this).html();
@@ -361,19 +401,6 @@ $(document).ready(function() {
     $(this).removeClass("hilite");
   });
 
-
-  function enableRuleCreation(interfaceToEnable) {
-    if (interfaceToEnable == "madlib") {
-      enableMadlibRuleCreation();
-    } else {
-      enableMagneticRuleCreation();
-    }
-  }
-
-  function enableMadlibRuleCreation() {
-    $('#madlib-create').css('display', 'all');
-    $('#madlib-create').toggle();
-  }
 
   function enableMagneticRuleCreation() {
     $('#magnetic-create').css('display', 'all');
