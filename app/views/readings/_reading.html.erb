@@ -3,7 +3,12 @@ None
 <% else %>
 <% unless reading.nil? %>
   <li class="reading-data">
-    <%= reading.data %> (<%= time_ago_in_words(reading.created_at) %> ago)
+  <% if (reading.data.class === "String") %>
+    <%= truncate(reading.data, :length => 10) %> 
+  <% else %>
+    <%= reading.data %> 
+  <% end %>
+  (<%= time_ago_in_words(reading.created_at) %> ago)
   </li>
 <% end %>
 <% end %>

@@ -146,11 +146,12 @@ $(document).ready(function() {
   //-------------------------------//
   // BEGIN MAGNETIC POETRY METHODS //
   //-------------------------------//
-  $("#rules-sensors .clickable").click(function () {
+  $("#rules-sensors .clickable").live('click', function () {
     var id_value_string = $(this).html();
     id_value_string = convertStringToURI(id_value_string);
-    var id_from_name = 1;
-    //alert('id_value_string = ' + id_value_string + '\n.');
+
+    var operators_div = $("#rules-operators");
+
     if (id_value_string === "") {
       //do nothing
     } else {
@@ -166,63 +167,33 @@ $(document).ready(function() {
           alert("Failed to submit : " + errorTextStatus + " ;" + error);
         },
         success: function (data) {
-          $("#valid-sensor-values").html(" (valid values: " + data.valid_values + ")");
+          var valid_values = data.valid_values;
+          //alert("\"" + valid_values.indexOf(",") + "\"");
+          $("#valid-sensor-values").html(" (valid values: " + valid_values + ")");
+          operators_div.html('');
+
+          // update the conditional buttons
+          if (valid_values.indexOf(",") >= 0) {
+            // update the conditional buttons for non-ordinal values (e.g., on,off)
+            $('<span class="clickable" style="display:all">equal to</span>').appendTo(operators_div);
+          } else {
+            // update the buttons for ordinal values (e.g., 0..100)
+            $('<span class="clickable" style="display:all">greater than</span> ').appendTo(operators_div);
+            $('<span class="clickable" style="display:all">greater than or equal to</span> ').appendTo(operators_div);
+            $('<span class="clickable" style="display:all">equal to</span> ').appendTo(operators_div);
+            $('<span class="clickable" style="display:all">less than</span> ').appendTo(operators_div);
+            $('<span class="clickable" style="display:all">less than or equal to</span>').appendTo(operators_div);
+          }
         }
       });
     }
   });
 
-  $("#OLDrules-sensors .clickable").click(function () {
+  $("#rules-actuators .clickable").live('click', function () {
     var id_value_string = $(this).html();
     id_value_string = convertStringToURI(id_value_string);
     var id_from_name = 1;
     //alert('id_value_string = ' + id_value_string + '\n.');
-    if (id_value_string === "") {
-      //do nothing
-    } else {
-      $.ajax({
-        dataType: "json",
-        cache: false,
-        url: '/sensors/get_id_from_name/' + id_value_string,
-        timeout: 2000,
-        beforeSend: function (xhr) {
-          xhr.setRequestHeader("Accept", "application/json");
-        },
-        error: function (XMLHttpRequest, errorTextStatus, error) {
-          alert("Failed to submit : " + errorTextStatus + " ;" + error);
-        },
-        success: function (data) {
-          id_from_name = data;
-          //alert("get_id_from_name data received " + data);
-          //alert("id_from_name" + id_from_name);
-          $("#valid-sensor-values").html = data;
-          //id_from_name = $("#valid-sensor-values").html();
-          //alert("id_from_name" + id_from_name);
-
-          $.ajax({
-            dataType: "json",
-            cache: false,
-            url: '/sensors/' + id_from_name + '/valid_values',
-            timeout: 2000,
-            error: function (XMLHttpRequest, errorTextStatus, error) {
-              alert("Failed to submit : " + errorTextStatus + " ;" + error);
-            },
-            success: function (data) {
-              //alert("valid_values data received " + data.valid_values);
-              $("#valid-sensor-values").html(" (valid values: " + data.valid_values + ")");
-            }
-          });
-        }
-      });
-    }
-  });
-
-
-  $("#rules-actuators .clickable").click(function () {
-    var id_value_string = $(this).html();
-    id_value_string = convertStringToURI(id_value_string);
-    var id_from_name = 1;
-    alert('id_value_string = ' + id_value_string + '\n.');
     if (id_value_string === "") {
       //do nothing
     } else {
@@ -257,12 +228,12 @@ $(document).ready(function() {
 
 		var generatedRule = generateRule(sensor_id, sensor_comparator, sensor_value, actuator_id, actuator_value);
 		$('textarea#rule_rule').val(generatedRule);
-		//alert("new_rule submitted: \n" + generatedRule);
+		alert("new_rule submitted: \n" + generatedRule);
 
-		return true;
+		return false;
 	});
 	
-  $("span.clickable").click(function () {
+  $("span.clickable").live('click', function () {
     var buttonText = $(this).html();
     var buttonDiv = $(this).parent("div").attr("id");
 
@@ -302,15 +273,17 @@ $(document).ready(function() {
     enableButtons( buttonText, buttonDiv );
   });
 
-  $("span.clickable").hover(function () {
-    $(this).addClass("hilite");
-    }, function () {
+  $("span.clickable").live('mouseover mouseout', function () {
+    if (event.type == 'mouseover') {
+      $(this).addClass("hilite");
+    } else  {
       $(this).removeClass("hilite");
-    });
+    }
+  });
 
-  $("span.editable").click(function () { 
+  $("span.editable").live('click', function () { 
     var buttonDiv = $(this).parent("div").attr("id");
-    $(this).replaceWith('<form id="editable"><input type="text" size="8" maxlength="8" id="buttonText" value="'+$(this).html()+'"></form>');
+    $(this).replaceWith('<form id="editable" style="display:inline"><input type="text" size="8" maxlength="8" id="buttonText" value="'+$(this).html()+'"></form>');
     $('#buttonText').focus();
 
     $("form#editable").submit(function () {
@@ -333,10 +306,12 @@ $(document).ready(function() {
     return false;
   });
 
-  $("span.editable").hover(function () {
-    $(this).addClass("hilite");
-    }, function () {
-    $(this).removeClass("hilite");
+  $("span.editable").live('mouseover mouseout', function () {
+    if (event.type == 'mouseover') {
+      $(this).addClass("hilite");
+    } else  {
+      $(this).removeClass("hilite");
+    }
   });
 
   function enableButtons(clickedText, clickedDiv) {

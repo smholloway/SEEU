@@ -48,3 +48,7 @@ Fix readings
 
 
 rails console
+
+Helpful Commands
+find . -name .git -print0 | xargs -0 rm -rf
+curl --data "reading[data]=3.1" http://localhost:3000/sensors/3/readings

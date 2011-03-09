@@ -15,7 +15,7 @@
               <%= link_to "Recent Readings", sensor_readings_path(sensor) %>:
             </div>
             <ul class="sensor-readings">
-                <%= render :partial => "readings/reading", :collection => sensor.readings.reverse[0..2] %>
+                <%= render :partial => "readings/reading", :collection => sensor.readings[0..2] %>
             </ul> <!-- sensor-readings -->
         </div> <!-- device-readings -->
     </div> <!-- device-description -->
