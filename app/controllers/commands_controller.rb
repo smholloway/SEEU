@@ -11,7 +11,7 @@ class CommandsController < ApplicationController
     end
   end
 
-  # GET /commands/1
+  # GET /commands
   # GET /commands/1.xml
   def show
 	  @actuator = Actuator.find(params[:actuator_id])
@@ -19,7 +19,8 @@ class CommandsController < ApplicationController
 	  @command = @actuator.command
 
     respond_to do |format|
-      format.html # show.html.erb
+      format.html { }
+      format.html { render :layout => false }
       format.xml  { render :xml => @command }
     end
   end
@@ -90,4 +91,16 @@ class CommandsController < ApplicationController
       format.xml  { head :ok }
     end
   end
+
+  # machine readable version with no layout
+  # GET /command
+  def command
+	  @actuator = Actuator.find(params[:id])
+	  @command = @actuator.command
+
+    respond_to do |format|
+      format.html { render :layout => false }
+    end
+  end
+
 end

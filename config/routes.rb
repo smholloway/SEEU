@@ -1,16 +1,11 @@
 Seeu::Application.routes.draw do
 
+  # RESTful routes
   resources :manufacturers do
     resources :models
   end
 
-#  resources :rules
-#	match 'rules/playing' => 'rules#playing'
-	resources :rules do
-		member do
-			get 'playing'
-		end
-	end
+  resources :rules
 
   resources :actuators do
 	  resource :commands
@@ -20,10 +15,7 @@ Seeu::Application.routes.draw do
 	  resources :readings
   end
 
-  resources :home do
-	resources :test
-  end
-
+  # routes that retrieve information about sensors and actuators via JSON
   match '/sensors/:id/valid_values' => 'sensors#valid_values'
   match '/sensors/:id/valid_values_string' => 'sensors#valid_values_string'
   match '/sensors/get_id_from_name/:name' => 'sensors#get_id_from_name'
@@ -34,29 +26,12 @@ Seeu::Application.routes.draw do
   match '/actuators/:id/valid_values_string' => 'actuators#valid_values_string'
   match '/actuators/get_values_from_name/:name' => 'actuators#get_values_from_name'
 
-  # Sample of regular route:
-  #   match 'products/:id' => 'catalog#view'
-  # Keep in mind you can assign values other than :controller and :action
+  # machine readable page (only the command--no additional markup)
+  match '/actuators/:id/command' => 'commands#command'
 
-  # Sample of named route:
-  #   match 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
-  # This route can be invoked with purchase_url(:id => product.id)
-
-  # Sample resource route with options:
-  #   resources :products do
-  #     member do
-  #       get 'short'
-  #       post 'toggle'
-  #     end
-  #
-  #     collection do
-  #       get 'sold'
-  #     end
-  #   end
-
+  # set the document root to app/view/home/index.html.erb
 	root :to => "home#index"
 
-  # This is a legacy wild controller route that's not recommended for RESTful applications.
-  # Note: This route will make all actions in every controller accessible via GET requests.
-  # match ':controller(/:action(/:id(.:format)))'
+  # route all invalid URLs to document root
+  match '*a' => redirect('/') # send all random routes to root
 end
