@@ -9,3 +9,21 @@ The University of Texas at Austin (http://www.utexas.edu/)
 This work was completed as part of Seth Holloway's doctoral dissertation. Further information about the research can be found on the official project pages:
 http://mpc.ece.utexas.edu/SEAP/
 http://mpc.ece.utexas.edu/SEEU/
+
+===Installation===
+Install pre-requisites: Ruby 1.9.2 and Rails 3.0.0+
+
+Download the source from the git repository
+ $ git clone git@github.com:smholloway/SEEU.git
+
+Create the database
+ $ rake db:migrate
+
+Load the server
+ $ rails server
+
+Navigate to the system using a web browser
+ $ localhost:3000
+
+Create sensors, actuators, and rules in the SEEU web application
+

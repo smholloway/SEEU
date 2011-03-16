@@ -32,7 +32,7 @@ class ReadingsController < ApplicationController
   # GET /readings/new
   # GET /readings/new.xml
   def new
-	@sensor = Sensor.find(params[:sensor_id])
+	  @sensor = Sensor.find(params[:sensor_id])
     @reading = @sensor.readings.build
 
 #    respond_to do |format|
@@ -50,7 +50,7 @@ class ReadingsController < ApplicationController
   # POST /readings
   # POST /readings.xml
   def create
-	@sensor = Sensor.find(params[:sensor_id])
+	  @sensor = Sensor.find(params[:sensor_id])
     @reading = @sensor.readings.build(params[:reading])
 
     respond_to do |format|
