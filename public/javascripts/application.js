@@ -1,4 +1,5 @@
 $(document).ready(function() {
+  var DEBUG = true;
   //-----------------------//
   // BEGIN MADLIBS METHODS //
   //-----------------------//
@@ -33,12 +34,13 @@ $(document).ready(function() {
           // update the conditional dropdown
           if (typeof(data[0])=='string' && isNaN(data[0])) {
             // update the conditional dropdown for non-ordinal values (e.g., on,off)
-            $('<option>=</option>').appendTo(sensor_operator_div);
+            $('<option>==</option>').appendTo(sensor_operator_div);
+            $('<option>!=</option>').appendTo(sensor_operator_div);
           } else {
             // update the dropdown for ordinal values (e.g., 0..100)
             $('<option>></option>').appendTo(sensor_operator_div);
             $('<option>>=</option>').appendTo(sensor_operator_div);
-            $('<option>=</option>').appendTo(sensor_operator_div);
+            $('<option>==</option>').appendTo(sensor_operator_div);
             $('<option><=</option>').appendTo(sensor_operator_div);
             $('<option><</option>').appendTo(sensor_operator_div);
           }
@@ -123,18 +125,54 @@ $(document).ready(function() {
   });
 
 	$('#madlib_create').submit(function() {
-		//alert('madlib_create');			
-		var sensor_id = $('#sensor_sensor_id').val();
-		var sensor_comparator = $('#sensor_operator_sensor_operator').val();
-		var sensor_value = $('#sensor_value_sensor_value').val();
-		var actuator_id = $('#actuator_actuator_id').val();
-		var actuator_value = $('#actuator_value_actuator_value').val();		
-	
-		var generatedRule = generateRule(sensor_id, sensor_comparator, sensor_value, actuator_id, actuator_value);
-		$('textarea#rule_rule').val(generatedRule);
-		alert("new_rule submitted: \n" + generatedRule);
+    if (DEBUG) {
+		  alert('madlib_create');			
+    }
+    var i = 0;
 
-		return false;
+    var sensorIdsArray = new Array();
+    var sensorOperatorsArray = new Array();
+    var sensorValuesArray = new Array();
+    var actuatorIdsArray = new Array();
+    var actuatorValuesArray = new Array();
+    $('.sensor_name option:selected').each(function(i) {
+      sensorIdsArray[i] = $(this).val();
+    });
+    $('.sensor_operator option:selected').each(function(i) {
+      sensorOperatorsArray[i] = $(this).text();
+    });
+    $('.sensor_value option:selected').each(function(i) {
+      sensorValuesArray[i] = $(this).text();
+    });
+    $('.actuator_name option:selected').each(function(i) {
+      actuatorIdsArray[i] = $(this).val();
+    });
+    $('.actuator_value option:selected').each(function(i) {
+      actuatorValuesArray[i] = $(this).text();
+    });
+
+    if (DEBUG) {
+      for (i = 0; i < sensorIdsArray.length; i++) {
+        alert(sensorIdsArray[i] + ' ' + sensorOperatorsArray[i] + ' ' + sensorValuesArray[i]);
+      }
+      for (i = 0; i < actuatorIdsArray.length; i++) {
+        alert(actuatorIdsArray[i] + ' ' + actuatorValuesArray[i]);
+      }
+    }
+
+		var generatedRule = generateRuleFromArrays(sensorIdsArray, sensorOperatorsArray, sensorValuesArray, actuatorIdsArray, actuatorValuesArray);
+		$('textarea#rule_rule').val(generatedRule);
+
+    if (DEBUG) {
+		  alert("new_rule submitted: \n" + generatedRule);
+    }
+
+    if (isRuleValid(rule)) {
+      return true;
+    } else {
+      alert("Rule is invalid. Please adjust your selections and try again");
+		  return false;
+    }
 	});
 
   //------------------------//
@@ -366,6 +404,18 @@ $(document).ready(function() {
   //-----------------------//
   // BEGIN UTILITY METHODS //
   //-----------------------//
+  function isRuleValid(rule) {
+    if (rule.indexOf("undefined") != -1) {
+      return false;
+    } else if (rule.indexOf("null") != -1) {
+      return false;
+    } else if (rule.indexOf("✓") != -1) {
+      return false;
+    }
+
+    return true;
+  }
+
   function enableRuleCreation(interfaceToEnable) {
     if (interfaceToEnable == "madlib") {
       enableMadlibRuleCreation();
@@ -405,6 +455,52 @@ $(document).ready(function() {
 		return rule;
 	}
 	
+  function generateRuleFromArrays(sensorIdsArray, sensorOperatorsArray, sensorValuesArray, actuatorIdsArray, actuatorValuesArray) {
+    var conditions = generateConditionsFromArrays(sensorIdsArray, sensorOperatorsArray, sensorValuesArray);
+    var actions = generateActionsFromArrays(actuatorIdsArray, actuatorValuesArray);
+    var rule = conditions + actions;
+
+		return rule;
+	}
+
+  function generateConditionsFromArrays(sensorIdsArray, sensorOperatorsArray, sensorValuesArray) {
+		var conditions = "if (";
+
+    for (var i = 0; i < sensorIdsArray.length; i++) {
+      conditions += "(Sensor.find(" + sensorIdsArray[i] + ").readings.first.data " + 
+        sensorOperatorsArray[i] + " ";
+      if (typeof(sensorValuesArray[i])=='string' && isNaN(sensorValuesArray[i])) {
+        conditions += "\"" + sensorValuesArray[i] + "\"";
+      } else {
+        conditions += sensorValuesArray[i] + ".to_s)";
+      }
+      if (i < sensorIdsArray.length - 1) {
+        conditions += " and ";
+      }
+    }
+    conditions += ") then\n";
+
+    return conditions;
+  }
+
+  function generateActionsFromArrays(actuatorIdsArray, actuatorValuesArray) {
+    var actions = "";
+
+    for (var i = 0; i < actuatorIdsArray.length; i++) {
+      actions += "a = Actuator.find(" + actuatorIdsArray[i] + ").command;\n" + "a.data = ";
+      if (typeof(actuatorValuesArray[i])=='string' && isNaN(actuatorValuesArray[i])) {
+        actions += "\"" + actuatorValuesArray[i] + "\";\n";
+      } else {
+        actions += actuatorValuesArray[i] + ".to_s;\n";
+      }
+      actions += "a.save;\n";
+    }
+    actions += "end\n";
+
+    return actions;
+  }
+
+
 	function generateMagneticRule(r) {
 		var rule = r;
 		return rule;

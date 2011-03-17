@@ -1,6 +1,6 @@
 class ReadingsController < ApplicationController
 
-#	before_filter :run_rules
+	#before_filter :run_rules
 
   # GET /readings
   # GET /readings.xml
@@ -102,7 +102,7 @@ class ReadingsController < ApplicationController
 	def run_rules()
 		Rule.all.each do |r|
 			code = r.rule.to_s
-			result = eval(code)
+      result = eval(code) rescue false
 		end
 	end
 
