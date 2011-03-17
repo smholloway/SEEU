@@ -45,8 +45,8 @@ class ActuatorsController < ApplicationController
     @actuator.command = Command.new
 
     if @actuator.save
-      @actuator.data_uri = sensor_readings_path(@atuator)
-      @actuator.configuration_uri = sensor_path(@actuator)
+      @actuator.data_uri = actuator_commands_path(@atuator)
+      @actuator.configuration_uri = actuator_path(@actuator)
     end 
 
     respond_to do |format|
