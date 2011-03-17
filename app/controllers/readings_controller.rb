@@ -105,7 +105,11 @@ class ReadingsController < ApplicationController
 			#code = Rule.sanitize(r.rule).to_s
 			code = r.rule
       logger.info "Running rule " + code
-      eval(code)
+      begin
+        eval(code)
+      rescue
+        logger.info "Error while running rule " + code
+      end
 		end
 	end
 
