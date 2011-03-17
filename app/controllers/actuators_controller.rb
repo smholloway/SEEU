@@ -44,10 +44,10 @@ class ActuatorsController < ApplicationController
     @actuator = Actuator.new(params[:actuator])
     @actuator.command = Command.new
 
-    if @actuator.save
-      @actuator.data_uri = actuator_commands_path(@atuator)
-      @actuator.configuration_uri = actuator_path(@actuator)
-    end 
+    #if @actuator.save
+    #  @actuator.data_uri = actuator_commands_path(@atuator)
+    #  @actuator.configuration_uri = actuator_path(@actuator)
+    #end 
 
     respond_to do |format|
       if @actuator.save
