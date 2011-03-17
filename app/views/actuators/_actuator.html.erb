@@ -10,7 +10,7 @@
         <div class="device-description">
             <%= truncate(strip_tags(actuator.description), :length => 140) %><br/>
 
-            <% if !actuator.command.data.nil? %>
+            <% unless actuator.command.nil? or actuator.command.data.nil? %>
             <div class="device-readings">
                 <%= link_to "Command", actuator_commands_path(actuator) %>:
                 <%= actuator.command.data %>

@@ -42,6 +42,12 @@ class ActuatorsController < ApplicationController
   # POST /actuators.xml
   def create
     @actuator = Actuator.new(params[:actuator])
+    @actuator.command = Command.new
+
+    if @actuator.save
+      @actuator.data_uri = sensor_readings_path(@atuator)
+      @actuator.configuration_uri = sensor_path(@actuator)
+    end 
 
     respond_to do |format|
       if @actuator.save

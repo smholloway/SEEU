@@ -30,7 +30,7 @@
 </p>
 
 <p>
-  <b><%= link_to "Command", @actuator.data_uri %>:</b>
+  <b><%= link_to "Command", edit_actuator_commands_path(@actuator) %>:</b>
   <%= @actuator.command.data rescue nil %>
 </p>
 
