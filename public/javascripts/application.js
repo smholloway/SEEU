@@ -1,5 +1,5 @@
 $(document).ready(function() {
-  var DEBUG = true;
+  var DEBUG = false;
   //-----------------------//
   // BEGIN MADLIBS METHODS //
   //-----------------------//
@@ -470,7 +470,7 @@ $(document).ready(function() {
       conditions += "(Sensor.find(" + sensorIdsArray[i] + ").readings.first.data " + 
         sensorOperatorsArray[i] + " ";
       if (typeof(sensorValuesArray[i])=='string' && isNaN(sensorValuesArray[i])) {
-        conditions += "\"" + sensorValuesArray[i] + "\"";
+        conditions += "\"" + sensorValuesArray[i] + "\")";
       } else {
         conditions += sensorValuesArray[i] + ".to_s)";
       }
@@ -478,7 +478,7 @@ $(document).ready(function() {
         conditions += " and ";
       }
     }
-    conditions += ") then\n";
+    conditions += ") then ";
 
     return conditions;
   }
@@ -487,15 +487,15 @@ $(document).ready(function() {
     var actions = "";
 
     for (var i = 0; i < actuatorIdsArray.length; i++) {
-      actions += "a = Actuator.find(" + actuatorIdsArray[i] + ").command;\n" + "a.data = ";
+      actions += "a = Actuator.find(" + actuatorIdsArray[i] + ").command; " + "a.data = ";
       if (typeof(actuatorValuesArray[i])=='string' && isNaN(actuatorValuesArray[i])) {
-        actions += "\"" + actuatorValuesArray[i] + "\";\n";
+        actions += "\"" + actuatorValuesArray[i] + "\"; ";
       } else {
-        actions += actuatorValuesArray[i] + ".to_s;\n";
+        actions += actuatorValuesArray[i] + ".to_s; ";
       }
-      actions += "a.save;\n";
+      actions += "a.save; ";
     }
-    actions += "end\n";
+    actions += "end";
 
     return actions;
   }
