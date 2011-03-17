@@ -1,6 +1,6 @@
 class ReadingsController < ApplicationController
 
-	before_filter :run_rules
+	after_commit :run_rules
 
   # GET /readings
   # GET /readings.xml
