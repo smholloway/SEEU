@@ -8,4 +8,14 @@ class Reading < ActiveRecord::Base
 	validates :data, :presence => true
 
 	default_scope :order => 'readings.created_at DESC'
+
+  #after_save run_rules()
+
+  #def run_rules()
+  # Rule.all.each do |r|
+  #    code = r.rule
+  #    logger.info "Running rule " + code
+  #    eval(code)
+  #  end
+  #end
 end
