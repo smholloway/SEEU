@@ -11,7 +11,7 @@ http://mpc.ece.utexas.edu/SEAP/
 http://mpc.ece.utexas.edu/SEEU/
 
 ===Installation===
-Install pre-requisites: Ruby 1.9.2 and Rails 3.0.0+
+Install pre-requisites: Ruby 1.8.7+ and Rails 3.0.0+
 
 Download the source from the git repository
  $ git clone git@github.com:smholloway/SEEU.git
