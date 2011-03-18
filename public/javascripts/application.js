@@ -487,7 +487,7 @@ $(document).ready(function() {
     var actions = "";
 
     for (var i = 0; i < actuatorIdsArray.length; i++) {
-      actions += "a = Actuator.find(" + actuatorIdsArray[i] + ").command; " + "a.data = ";
+      actions += "a = Actuator.find(" + actuatorIdsArray[i] + ").command; " + "a.data=";
       if (typeof(actuatorValuesArray[i])=='string' && isNaN(actuatorValuesArray[i])) {
         actions += "\"" + actuatorValuesArray[i] + "\"; ";
       } else {

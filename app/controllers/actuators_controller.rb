@@ -25,7 +25,7 @@ class ActuatorsController < ApplicationController
   # GET /actuators/new.xml
   def new
     @actuator = Actuator.new
-		@actuator.command = Command.new unless @actuator.command
+		@actuator.command = Command.new #unless @actuator.command
 
     respond_to do |format|
       format.html # new.html.erb
