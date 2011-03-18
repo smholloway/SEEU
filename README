@@ -16,8 +16,14 @@ Install pre-requisites: Ruby 1.9.2 and Rails 3.0.0+
 Download the source from the git repository
  $ git clone git@github.com:smholloway/SEEU.git
 
+Change into the SEEU directory
+ $ cd SEEU
+
 Create the database
  $ rake db:migrate
+
+Add the seed data
+ $ rake db:seed
 
 Load the server
  $ rails server
