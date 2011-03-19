@@ -73,6 +73,11 @@ rule1 = Rule.create([{
 }])
 rule2 = Rule.create([{ 
   :id => 2,
+  :rule => 'if ((Sensor.find(3).readings.first.data >= 0.to_s)) then a = Actuator.find(3).command; a.data = "low"; a.save; end', 
+  :description => 'if the tiltometer is negative, turn the fan to high' 
+}])
+rule3 = Rule.create([{ 
+  :id => 3,
   :rule => 'if ((Sensor.find(1).readings.first.data > 78.to_s)) then a = Actuator.find(1).command; a.data = 72.to_s; a.save; end', 
   :description => 'when the temperature is above 78, turn the air conditioner to 72' 
 }])

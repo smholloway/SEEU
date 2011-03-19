@@ -116,11 +116,14 @@ $(document).ready(function() {
     var new_div_id    = incrementDivId(parent_div_id);
 
     if (value_string === "" || value_string === "then") {
-      // disable any subsequent conditional divs
+      // disable any subsequent conditional divs and remove children
     } else {
       // enable another IF block
       var new_div = parent_div.clone().insertAfter(parent_div);
       new_div.attr("id", new_div_id);
+      //var row = "<option value=\"" + "" + "\">" + "" + "</option>";
+      //$(row).appendTo(actuator_value_div);
+      disableMadlibRuleCreation();
     }
   });
 
@@ -167,11 +170,11 @@ $(document).ready(function() {
 		  alert("new_rule submitted: \n" + generatedRule);
     }
 
-    if (isRuleValid(rule)) {
-      return true;
-    } else {
+    if (!isRuleValid(rule)) {
       alert("Rule is invalid. Please adjust your selections and try again");
 		  return false;
+    } else {
+      return true;
     }
 	});
 
@@ -405,13 +408,15 @@ $(document).ready(function() {
   // BEGIN UTILITY METHODS //
   //-----------------------//
   function isRuleValid(rule) {
+    alert("isRuleValid(rule) = " + rule);
     if (rule.indexOf("undefined") != -1) {
       return false;
     } else if (rule.indexOf("null") != -1) {
       return false;
-    } else if (rule.indexOf("✓") != -1) {
-      return false;
-    }
+    } 
+    //else if (rule.indexOf("✓") != -1) {
+    //  return false;
+    //}
 
     return true;
   }
@@ -428,8 +433,38 @@ $(document).ready(function() {
     return encodeURI(input).replace("#", "%23");
   }
 
+  function conditionsValid() {
+    $('div').filter(function() {
+      return this.id.match(/condition_/);
+    }).each(function() {
+      if ($(this).find('.sensor_name').val() === '') {
+        return false;
+      }
+    });
+
+    return true;
+  }
+
+  function actionsValid() {
+    $('div').filter(function() {
+      return this.id.match(/action_/);
+    }).each(function() {
+      if ($(this).find('.actuator_name').val() === '') {
+        return false;
+      }
+    });
+
+   return true;
+  }
+
   function enableMadlibRuleCreation() {
-    $("#madlib-create").attr('disabled','');
+    if (conditionsValid() && actionsValid()) {
+      $("#madlib-create").attr('disabled','');
+    }
+  }
+
+  function disableMadlibRuleCreation() {
+    $("#madlib-create").attr('disabled','disabled');
   }
 
   function enableMagneticRuleCreation() {
@@ -485,13 +520,20 @@ $(document).ready(function() {
 
   function generateActionsFromArrays(actuatorIdsArray, actuatorValuesArray) {
     var actions = "";
+    var id; var value;
 
     for (var i = 0; i < actuatorIdsArray.length; i++) {
-      actions += "a = Actuator.find(" + actuatorIdsArray[i] + ").command; " + "a.data=";
-      if (typeof(actuatorValuesArray[i])=='string' && isNaN(actuatorValuesArray[i])) {
-        actions += "\"" + actuatorValuesArray[i] + "\"; ";
+      id = actuatorIdsArray[i];
+      value = actuatorValuesArray[i];
+
+      if (id === "" || value === "") {
+        id = '"undefined"';
+      }
+      actions += "a = Actuator.find(" + id + ").command; " + "a.data=";
+      if (typeof(value)=='string' && isNaN(value)) {
+        actions += "\"" + value + "\"; ";
       } else {
-        actions += actuatorValuesArray[i] + ".to_s; ";
+        actions += value + ".to_s; ";
       }
       actions += "a.save; ";
     }
