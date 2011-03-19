@@ -32,6 +32,7 @@ Seeu::Application.routes.draw do
   # feedback and about
   match 'feedback', :to => 'home#feedback', :as => 'feedback'
   match 'about', :to => 'home#about', :as => 'about'
+  match 'study', :to => 'home#study', :as => 'study'
 
   # set the document root to app/view/home/index.html.erb
 	root :to => "home#index"

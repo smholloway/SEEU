@@ -26,5 +26,14 @@ class HomeController < ApplicationController
 		end
   end
 
+  def study
+
+		respond_to do |format|
+			format.html
+			format.xml { render :xml => @sensors }
+		end
+  end
+
+
 end
 
