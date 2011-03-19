@@ -8,6 +8,23 @@ class HomeController < ApplicationController
 			format.html
 			format.xml { render :xml => @sensors }
 		end
+	end
+
+  def about
+
+		respond_to do |format|
+			format.html
+			format.xml { render :xml => @sensors }
+		end
   end
+
+  def feedback 
+
+		respond_to do |format|
+			format.html
+			format.xml { render :xml => @sensors }
+		end
+  end
+
 end
 

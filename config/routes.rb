@@ -29,6 +29,10 @@ Seeu::Application.routes.draw do
   # machine readable page (only the command--no additional markup)
   match '/actuators/:id/command' => 'commands#command'
 
+  # feedback and about
+  match 'feedback', :to => 'home#feedback', :as => 'feedback'
+  match 'about', :to => 'home#about', :as => 'about'
+
   # set the document root to app/view/home/index.html.erb
 	root :to => "home#index"
 
