@@ -25,7 +25,7 @@ sensor2 = Sensor.create([{
 sensor3 = Sensor.create([{ 
   :id => 3,
   :name => 'tiltometer', 
-  :description => 'Sun SPOT reporting direction in X dimension', 
+  :description => 'Sun SPOT reporting tilt in the X dimension', 
   :valid_values => '-1.58..1.58', 
   :manufacturer => 'Sun', 
   :model => 'SPOT' 
@@ -33,8 +33,8 @@ sensor3 = Sensor.create([{
 
 actuator1 = Actuator.create([{ 
   :id => 1,
-  :name => 'thermostat', 
-  :description => 'Sun SPOT device representing a thermostat LEDs display the set temperature in binary', 
+  :name => 'air conditioner', 
+  :description => 'Sun SPOT device representing an air conditioner with LEDs displaying the temperature in binary', 
   :valid_values => '0..255', 
   :manufacturer => 'Sun', 
   :model => 'SPOT' 
@@ -43,7 +43,7 @@ actuator2 = Actuator.create([{
   :id => 2,
   :name => 'alarm', 
   :description => 'Sun SPOT device representing an alarm', 
-  :valid_values => '0..255', 
+  :valid_values => 'off,on', 
   :manufacturer => 'Sun', 
   :model => 'SPOT' 
 }])
@@ -69,10 +69,10 @@ command3 = Command.create([{
 rule1 = Rule.create([{ 
   :id => 1,
   :rule => 'if ((Sensor.find(3).readings.first.data < 0.to_s)) then a = Actuator.find(3).command; a.data = "high"; a.save; end', 
-  :description => 'if the x sensor is negative, turn the fan to high' 
+  :description => 'if the tiltometer is negative, turn the fan to high' 
 }])
 rule2 = Rule.create([{ 
   :id => 2,
-  :rule => 'if ((Sensor.find(1).readings.first.data > 75.to_s)) then a = Actuator.find(1).command; a.data = 72.to_s; a.save; end', 
-  :description => 'when its hot, turn on the thermostat' 
+  :rule => 'if ((Sensor.find(1).readings.first.data > 78.to_s)) then a = Actuator.find(1).command; a.data = 72.to_s; a.save; end', 
+  :description => 'when the temperature is above 78, turn the air conditioner to 72' 
 }])
