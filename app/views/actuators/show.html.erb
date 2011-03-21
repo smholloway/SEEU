@@ -34,6 +34,7 @@
   <%= @actuator.command.data rescue nil %>
 </p>
 
-
-<%= link_to 'Back', actuators_path %> | 
+<br/>
+<%= link_to 'Home', root_path %> | 
+<%= link_to 'Actuators', actuators_path %> | 
 <%= link_to 'Edit', edit_actuator_path(@actuator) %>

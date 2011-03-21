@@ -7,6 +7,8 @@
   <%= @reading.data %>
 </p>
 
+<br/>
+<%= link_to 'Home', home_path %> | 
 <%= link_to 'Back', sensor_readings_path(@sensor) %> |
 <%= link_to 'Edit', edit_sensor_reading_path(@sensor, @reading) %>
 

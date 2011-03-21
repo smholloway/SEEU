@@ -49,6 +49,8 @@
   <%= link_to @sensor.configuration_uri, @sensor.configuration_uri %>
 </p>
 
-<%= link_to 'Back', sensors_path %> | 
+<br/>
+<%= link_to 'Home', root_path %> | 
+<%= link_to 'Sensors', sensors_path %> | 
 <%= link_to 'Edit', edit_sensor_path(@sensor) %>
 <%#= link_to 'Delete', sensor_path(@sensor), :confirm => 'Are you sure?', :method => :delete %>

@@ -1,12 +1,16 @@
 <% title "Command" %>
 
+<div>
+Command: 
 <% if @command.nil? or @command.data.nil? %>
 OFF
 <% else %>
 <%= @command.data rescue nil %>
 <% end %>
+</div>
 
 <br/>
 
+<%= link_to 'Home', root_path %> |
 <%= link_to 'Back to actuator', actuator_path(@actuator) %> |
 <%= link_to 'Edit command', edit_actuator_commands_path(@actuator) %>
