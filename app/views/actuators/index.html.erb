@@ -1,12 +1,13 @@
 <% title "Actuators" %>
 
+<div class="yield">
 <h1>Listing actuators</h1>
 
 <%= render @actuators %>
 <%= will_paginate @actuators %>
 
 <br />
-<br />
 
 <%= link_to 'Home', root_path %> | 
 <%= link_to 'New Actuator', new_actuator_path %>
+</div> <!-- .yield -->

@@ -6,11 +6,11 @@
 <div id="left-box">
 	<span class="box-heading"><%= link_to 'Sensors', sensors_path %></span>
 
-    <%= render :partial => "sensors/sensor", :collection => @sensors[0..4] %>
+    <%= render :partial => "sensors/sensor", :collection => @sensors[0..3] %>
 
-	<% if @sensors.length > 5 %>
+	<% if @sensors.length > 4 %>
 	<div class="more">
-		<%= link_to "... the other sensors (#{@sensors.length-5})", sensors_path %>
+		<%= link_to "... the other sensors (#{@sensors.length-4})", sensors_path %>
 	</div>
 	<% end %>
 </div> <!-- left-box -->

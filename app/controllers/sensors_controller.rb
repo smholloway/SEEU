@@ -45,6 +45,8 @@ class SensorsController < ApplicationController
     if @sensor.save
       @sensor.data_uri = sensor_readings_path(@sensor)
       @sensor.configuration_uri = sensor_path(@sensor)
+
+      #@sensor.valid_values = params[:valid_values].downcase
     end
 
     respond_to do |format|

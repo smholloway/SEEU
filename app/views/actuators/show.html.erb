@@ -1,5 +1,6 @@
 <% title "Show Actuator" %>
 
+<div class="yield">
 <p id="notice"><%= notice %></p>
 
 <p>
@@ -34,7 +35,7 @@
   <%= @actuator.command.data rescue nil %>
 </p>
 
-<br/>
 <%= link_to 'Home', root_path %> | 
 <%= link_to 'Actuators', actuators_path %> | 
 <%= link_to 'Edit', edit_actuator_path(@actuator) %>
+</div> <!-- .yield -->

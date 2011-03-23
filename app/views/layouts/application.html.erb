@@ -14,24 +14,27 @@
 </head>
 <body>
 	<div id="page">
-		<div id="content">
-			<!-- ###### -->
-			<!-- HEADER -->
-			<!-- ###### -->
-			<div id="header">
-				<%= link_to 'SEEU', root_path %>
-			</div> <!-- header -->
+    <!-- ###### -->
+    <!-- HEADER -->
+    <!-- ###### -->
+    <div id="header">
+      <div id="logo">
+        <%= link_to 'SEEU', root_path %> - 
+        Sensor Enablement for End-Users
+      </div>
+    </div> <!-- header -->
+    <%= render 'shared/navigation' %>
 
-			<%= yield %>
+    <%= yield %>
 
-		</div> <!-- content -->
-			
-		<div id="footer">
-      &copy; 
-      <%= link_to 'Seth Holloway', 'http://www.sethholloway.com/' %> - 
-			<%= link_to 'MPC', 'http://mpc.ece.utexas.edu/' %> - 
-			<%= link_to 'The University of Texas at Austin', 'http://www.utexas.edu/' %>
-		</div> <!-- footer -->
+    <%= render 'shared/navigation' %>
 	</div> <!-- page -->
+    
+  <div id="footer">
+    &copy; 
+    <%= link_to 'Seth Holloway', 'http://www.sethholloway.com/' %> - 
+    <%= link_to 'MPC', 'http://mpc.ece.utexas.edu/' %> - 
+    <%= link_to 'The University of Texas at Austin', 'http://www.utexas.edu/' %>
+  </div> <!-- footer -->
 </body>
 </html>

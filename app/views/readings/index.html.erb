@@ -1,4 +1,6 @@
 <% title "Readings" %>
+
+<div class="yield">
 <h1>Readings for <%=h @sensor.name %></h1>
 
 <h4>Readings</h4>
@@ -10,18 +12,10 @@
 </div> <!-- sensor-readings -->
 </div> <!-- readings -->
 
-<div style="display:none">
-<% @sensor.readings.each do |reading| %>
-      <%= link_to 'Show', sensor_reading_path(@sensor, reading) %>/
-      <%= link_to 'Edit', edit_sensor_reading_path(@sensor, reading) %>/
-      <%= link_to 'Delete', sensor_reading_path(@sensor, reading), :confirm => 'Are you sure?', :method => :delete %>
-<% end %>
-</div> <!-- display:none -->
-
-
 <br/>
 
 <%= link_to 'Home', root_path %> |
 <%= link_to 'Back to sensor', sensor_path(@sensor) %> |
 <%= link_to 'New reading', new_sensor_reading_path(@sensor) %>
 
+</div> <!-- .yield -->

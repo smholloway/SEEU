@@ -1,12 +1,12 @@
 <% title "Sensors" %>
 
+<div class="yield">
 <h1>Listing sensors</h1>
 
 <%= render @sensors %>
 <%= will_paginate @sensors %>
 
-<br />
-<br />
 
 <%= link_to 'Home', root_path %> | 
 <%= link_to 'New Sensor', new_sensor_path %>
+</div> <!-- .yield -->

@@ -1,8 +1,12 @@
 <% title "Editing Actuator" %>
 
+<div class="yield">
 <h1>Editing actuator</h1>
 
 <%= render 'form' %>
 
-<%= link_to 'Show', @actuator %> |
-<%= link_to 'Back', actuators_path %>
+<br/>
+<%= link_to 'Home', root_path %> |
+<%= link_to 'Actuators', actuators_path %> |
+<%= link_to 'Back', @actuator %>
+</div> <!-- .yield -->

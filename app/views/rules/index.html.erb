@@ -1,11 +1,12 @@
 <% title "Rules" %>
 
+<div class="yield">
 <h1>Listing rules</h1>
 
-<% @rules.each do |rule| %>
+<% @rules.each_with_index do |rule, index| %>
 <div class="rule-entry">
 	<div>
-		<%= link_to "Rule #{rule.id}", rule %><br/>
+		<%= link_to "Rule #{index+1}", rule %><br/>
 	</div>
 	<div>
 		Rule description:
@@ -16,27 +17,13 @@
         <% end %>
 	</div>
 	<div>
-		<%= link_to 'Show', rule %> | 
+    <%#= link_to 'Show', rule, :class => 'button' %>
 		<%#= link_to 'Edit', edit_rule_path(rule) %>
-		<%= link_to 'Delete', rule, :confirm => 'Are you sure?', :method => :delete %>
+    <%= link_to 'Delete', rule, :class => 'button', :confirm => 'Are you sure?', :method => :delete %>
 	</div>
 	<br/>
 </div> <!-- rule-entry -->
 <% end %>
 
-
-<div style="display:none">
-A rule will look like<br/>
-<pre>
-if (Sensor.where("name = 'Sensor1'").first.readings.last.data > 0.to_s)
-  a = Actuator.where("name = 'actuator1'").first;
-  a.command.data = 1;
-  a.save;
-end;
-</pre>
-</div>
-
-<br />
-
-<%= link_to 'Home', root_path %> | 
-<%= link_to 'New Rule', new_rule_path %>
+<%= link_to 'New Rule', new_rule_path, :class => 'button' %>
+</div> <!-- .yield -->

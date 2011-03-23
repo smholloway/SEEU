@@ -1,5 +1,6 @@
 <% title "Show Rule" %>
 
+<div class="yield">
 <p id="notice"><%= notice %></p>
 
 <p>
@@ -12,7 +13,5 @@
   <%= @rule.description %>
 </p>
 
-<br/>
-<%= link_to 'Home', root_path %> | 
-<%= link_to 'Back', rules_path %> | 
-<%= link_to 'Edit Description', edit_rule_path(@rule) %>
+<%= link_to 'Edit Description', edit_rule_path(@rule), :class => 'button' %>
+</div> <!-- .yield -->
