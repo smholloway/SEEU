@@ -41,7 +41,7 @@ class ActuatorsController < ApplicationController
   # POST /actuators
   # POST /actuators.xml
   def create
-    @actuator = Actuator.new(params[:actuator])
+    @actuator = Actuator.new(params[:actuator].each_value(&:strip!))
     @actuator.command = Command.new
 
     #if @actuator.save
@@ -66,7 +66,7 @@ class ActuatorsController < ApplicationController
     @actuator = Actuator.find(params[:id])
 
     respond_to do |format|
-      if @actuator.update_attributes(params[:actuator])
+      if @actuator.update_attributes(params[:actuator].each_value(&:strip!))
         format.html { redirect_to(@actuator, :notice => 'Actuator was successfully updated.') }
         format.xml  { head :ok }
       else

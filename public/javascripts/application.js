@@ -53,6 +53,8 @@ $(document).ready(function() {
         }
       });
     }
+    // if the rule is now valid, enable the create button to be pressed
+    enableMadlibRuleCreation();
   });
 
   $("select.actuator_name").live('change', function () {
@@ -90,7 +92,7 @@ $(document).ready(function() {
       });
     }
 
-    // enable the create button to be pressed
+    // if the rule is now valid, enable the create button to be pressed
     enableMadlibRuleCreation();
   });
 
@@ -107,6 +109,9 @@ $(document).ready(function() {
       var new_div = parent_div.clone().insertAfter(parent_div);
       new_div.attr("id", new_div_id);
     }
+
+		// if the rule is now valid, enable the create button to be pressed
+    enableMadlibRuleCreation();
   });
 
   $("select.actuator_conditional").live('change', function () {
@@ -123,8 +128,10 @@ $(document).ready(function() {
       new_div.attr("id", new_div_id);
       //var row = "<option value=\"" + "" + "\">" + "" + "</option>";
       //$(row).appendTo(actuator_value_div);
-      disableMadlibRuleCreation();
+      //disableMadlibRuleCreation();
     }
+    // if the rule is now valid, enable the create button to be pressed
+    enableMadlibRuleCreation();
   });
 
 	$('#madlib_create').submit(function() {
@@ -403,7 +410,6 @@ $(document).ready(function() {
   //-----------------------------//
 
 
-
   //-----------------------//
   // BEGIN UTILITY METHODS //
   //-----------------------//
@@ -434,33 +440,41 @@ $(document).ready(function() {
   }
 
   function conditionsValid() {
+		var valid = true;
     $('div').filter(function() {
       return this.id.match(/condition_/);
     }).each(function() {
-      if ($(this).find('.sensor_name').val() === '') {
+      if (($(this).find('.sensor_name').val() == '') ||
+					($(this).find('.sensor_value').val() == '')) {
+				valid = false;
         return false;
       }
     });
 
-    return true;
+    return valid;
   }
 
   function actionsValid() {
+		var valid = true;
     $('div').filter(function() {
       return this.id.match(/action_/);
     }).each(function() {
-      if ($(this).find('.actuator_name').val() === '') {
+      if (($(this).find('.actuator_name').val() == '') ||
+					($(this).find('.actuator_value').val() == '')) {
+				valid = false;
         return false;
       }
     });
 
-   return true;
+   return valid;
   }
 
   function enableMadlibRuleCreation() {
-    if (conditionsValid() && actionsValid()) {
+    if ((conditionsValid() == true) && (actionsValid() == true)) {
       $("#madlib-create").attr('disabled','');
-    }
+    } else {
+			disableMadlibRuleCreation();
+		}
   }
 
   function disableMadlibRuleCreation() {
@@ -500,14 +514,18 @@ $(document).ready(function() {
 
   function generateConditionsFromArrays(sensorIdsArray, sensorOperatorsArray, sensorValuesArray) {
 		var conditions = "if (";
+		var id, op, val;
 
     for (var i = 0; i < sensorIdsArray.length; i++) {
-      conditions += "(Sensor.find(" + sensorIdsArray[i] + ").readings.first.data " + 
-        sensorOperatorsArray[i] + " ";
-      if (typeof(sensorValuesArray[i])=='string' && isNaN(sensorValuesArray[i])) {
-        conditions += "\"" + sensorValuesArray[i] + "\")";
+			id    = jQuery.trim(sensorIdsArray[i]);
+			op    = jQuery.trim(sensorOperatorsArray[i]);
+			value = jQuery.trim(sensorValuesArray[i]);
+			
+      conditions += "(Sensor.find(" + id + ").readings.first.data " + op + " ";
+      if (typeof(value)=='string' && isNaN(value)) {
+        conditions += "\"" + value + "\")";
       } else {
-        conditions += sensorValuesArray[i] + ".to_s)";
+        conditions += value + ".to_s)";
       }
       if (i < sensorIdsArray.length - 1) {
         conditions += " and ";
@@ -520,11 +538,11 @@ $(document).ready(function() {
 
   function generateActionsFromArrays(actuatorIdsArray, actuatorValuesArray) {
     var actions = "";
-    var id; var value;
+    var id, value;
 
     for (var i = 0; i < actuatorIdsArray.length; i++) {
-      id = actuatorIdsArray[i];
-      value = actuatorValuesArray[i];
+      id    = jQuery.trim(actuatorIdsArray[i]);
+      value = jQuery.trim(actuatorValuesArray[i]);
 
       if (id === "" || value === "") {
         id = '"undefined"';

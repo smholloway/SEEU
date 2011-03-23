@@ -52,7 +52,7 @@ class ReadingsController < ApplicationController
   # POST /readings.xml
   def create
 	  @sensor = Sensor.find(params[:sensor_id])
-    @reading = @sensor.readings.build(params[:reading])
+    @reading = @sensor.readings.build(params[:reading].each_value(&:strip!))
 
     respond_to do |format|
       if @reading.save

@@ -48,7 +48,7 @@ class CommandsController < ApplicationController
   # POST /commands.xml
   def create
 	  @actuator = Actuator.find(params[:actuator_id])
-    @command = Command.new(params[:command])
+    @command = Command.new(params[:command].each_value(&:strip!))
 
     respond_to do |format|
       if @command.save
@@ -69,7 +69,7 @@ class CommandsController < ApplicationController
 #		@command = Command.find(params[:id])
 
     respond_to do |format|
-      if @command.update_attributes(params[:command])
+      if @command.update_attributes(params[:command].each_value(&:strip!))
         format.html { redirect_to(actuator_commands_path(@actuator), :notice => 'Command was successfully updated.') }
         format.xml  { head :ok }
       else

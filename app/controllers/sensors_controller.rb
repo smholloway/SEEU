@@ -41,7 +41,7 @@ class SensorsController < ApplicationController
   # POST /sensors
   # POST /sensors.xml
   def create
-    @sensor = Sensor.new(params[:sensor])
+    @sensor = Sensor.new(params[:sensor].each_value(&:strip!))
     if @sensor.save
       @sensor.data_uri = sensor_readings_path(@sensor)
       @sensor.configuration_uri = sensor_path(@sensor)
@@ -66,7 +66,7 @@ class SensorsController < ApplicationController
     @sensor = Sensor.find(params[:id])
 
     respond_to do |format|
-      if @sensor.update_attributes(params[:sensor])
+      if @sensor.update_attributes(params[:sensor].each_value(&:strip!))
         format.html { redirect_to(@sensor, :notice => 'Sensor was successfully updated.') }
         format.xml  { head :ok }
       else
