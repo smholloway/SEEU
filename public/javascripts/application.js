@@ -447,7 +447,7 @@ $(document).ready(function() {
       if (($(this).find('.sensor_name').val() == '') ||
 					($(this).find('.sensor_value').val() == '')) {
 				valid = false;
-        return false;
+        return false; //breaks the loop
       }
     });
 
@@ -462,7 +462,7 @@ $(document).ready(function() {
       if (($(this).find('.actuator_name').val() == '') ||
 					($(this).find('.actuator_value').val() == '')) {
 				valid = false;
-        return false;
+        return false; //breaks the loop
       }
     });
 
@@ -470,7 +470,7 @@ $(document).ready(function() {
   }
 
   function enableMadlibRuleCreation() {
-    if ((conditionsValid() == true) && (actionsValid() == true)) {
+    if (conditionsValid() && actionsValid()) {
       $("#madlib-create").attr('disabled','');
     } else {
 			disableMadlibRuleCreation();
